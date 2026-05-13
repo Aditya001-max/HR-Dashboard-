@@ -1,0 +1,216 @@
+// ──────────────────────────────────────────────────────────────────
+// Meridian HR — Prisma schema (single source of truth).
+//
+// The `provider` line below is toggled between "sqlite" and
+// "postgresql" by  scripts/prepare-build.mjs:
+//   • Local dev: SQLite (default)
+//   • Vercel build: auto-swaps to postgresql at build time
+//
+// Keep this file as the canonical source for ALL model definitions.
+// ──────────────────────────────────────────────────────────────────
+
+generator client {
+  provider      = "prisma-client-js"
+  // "native" = the OS Prisma client was generated on (your laptop).
+  // "rhel-openssl-3.0.x" = the Linux runtime Vercel uses.
+  // Both must be listed so the client works locally AND in production.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("hr_admin")
+  createdAt DateTime @default(now())
+}
+
+model Employee {
+  id        String  @id
+  name      String
+  geo       String
+  dept      String
+  desig     String
+  manager   String?
+  skill     String?
+  doj       String
+  status    String
+  lwd       String?
+  internEnd String?
+  allocation String?
+
+  finance              Finance?
+  productivity         Productivity?
+  payroll              Payroll?
+  leave                Leave?
+  attritionRisk        AttritionRisk?
+  goals                Goal[]
+  trainingEnrollments  TrainingEnrollment[]
+  risks                Risk[]
+}
+
+model Finance {
+  id         Int    @id @default(autoincrement())
+  employeeId String @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  annualInr  Float?
+  monthlyInr Float?
+  annualUsd  Float?
+  monthlyUsd Float?
+}
+
+model Productivity {
+  id              Int    @id @default(autoincrement())
+  employeeId      String @unique
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  score           Float
+  tasksCompleted  Int
+  onTimePct       Float
+}
+
+model Payroll {
+  id         Int    @id @default(autoincrement())
+  employeeId String @unique
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  ctc        Float
+  basic      Float
+  hra        Float
+  special    Float
+  gross      Float
+  pfEmp      Float
+  pfEmr      Float
+  esi        Float
+  pt         Float
+  tds        Float
+  net        Float
+  currency   String
+}
+
+model Leave {
+  id            Int    @id @default(autoincrement())
+  employeeId    String @unique
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  clEntitled    Int
+  clUsed        Int
+  clBalance     Int
+  slEntitled    Int
+  slUsed        Int
+  slBalance     Int
+  elEntitled    Int
+  elUsed        Int
+  elBalance     Int
+  attendancePct Float
+}
+
+model AttritionRisk {
+  id           Int    @id @default(autoincrement())
+  employeeId   String @unique
+  employee     Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  tenureDays   Int
+  tenureScore  Float
+  prodScore    Float
+  compScore    Float
+  otherScore   Float
+  totalScore   Float
+  riskLevel    String
+  topReason    String
+}
+
+model Goal {
+  id              String @id
+  employeeId      String
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  unit            String?
+  target          Float
+  actual          Float
+  weight          Float
+  achievementPct  Float
+  rating          Float?
+  status          String
+}
+
+model TrainingProgram {
+  id          String  @id
+  title       String
+  category    String
+  durationHrs Int
+  mandatory   Boolean
+  target      String?
+  enrollments TrainingEnrollment[]
+}
+
+model TrainingEnrollment {
+  id            String @id
+  employeeId    String
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  programId     String
+  program       TrainingProgram @relation(fields: [programId], references: [id], onDelete: Cascade)
+  completionPct Float
+  status        String
+}
+
+model Risk {
+  id         String  @id
+  employeeId String
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  category   String
+  level      String
+  raisedOn   String
+  status     String
+  owner      String?
+  notes      String?
+}
+
+model OpenPosition {
+  id        String @id
+  title     String
+  dept      String
+  geo       String
+  openings  Int
+  priority  String
+  daysOpen  Int
+  candidates Candidate[]
+}
+
+model Candidate {
+  id          String @id
+  name        String
+  positionId  String
+  position    OpenPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  stage       String
+  daysInStage Int
+  source      String
+  rating      Float?
+}
+
+model Compliance {
+  id        String @id
+  title     String
+  category  String
+  geo       String
+  dueDate   String
+  frequency String
+  authority String
+  status    String
+}
+
+model Offboarded {
+  id          String @id
+  name        String
+  geo         String
+  dept        String
+  desig       String
+  doj         String
+  lwd         String
+  quarter     String
+  reason      String
+  tenureYears Float
+}

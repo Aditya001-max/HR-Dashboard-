@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian HR — Workforce Intelligence Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+:root {
+  --ink: #15212E;
+  --ink-soft: #2A3441;
+  --ink-mid: #4B5563;
+  --ink-light: #6B7280;
+  --paper: #FAF8F3;
+  --paper-warm: #F4EFE3;
+  --card: #FFFFFF;
+  --hair: #E5DDD0;
+  --hair-dark: #C9BFAB;
+  --crimson: #B23A2C;
+  --crimson-soft: #E8C5BF;
+  --teal: #2C7F76;
+  --teal-soft: #C5DDD9;
+  --gold: #C49A3D;
+  --gold-soft: #EEDCAE;
+  --blue: #3B6CA8;
+  --blue-soft: #C8D6E8;
+  --violet: #6B5B95;
+  --shadow-sm: 0 1px 2px rgba(21,33,46,0.06);
+  --shadow-md: 0 4px 12px rgba(21,33,46,0.08);
+  --shadow-lg: 0 20px 60px rgba(21,33,46,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  font-family: 'Manrope', -apple-system, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.serif { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.01em; }
+.mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, select { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-light);
+}
+
+/* ============================================================
+   LOGIN SCREEN
+   ============================================================ */
+#login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+  display: flex;
+  align-items: stretch;
+  z-index: 100;
+}
+
+.login-left {
+  flex: 1;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 64px 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 80%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(196,154,61,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+
+.login-quote {
+  position: relative;
+  z-index: 2;
+}
+
+.login-quote .big {
+  font-family: 'Fraunces', serif;
+  font-size: 56px;
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+
+.login-quote .big em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.login-quote .sub {
+  font-size: 15px;
+  color: rgba(250,248,243,0.7);
+  max-width: 440px;
+  line-height: 1.6;
+}
+
+.login-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(250,248,243,0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-right {
+  flex: 0 0 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-card h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.login-card .lc-sub {
+  color: var(--ink-light);
+  margin-bottom: 36px;
+  font-size: 14px;
+}
+
+.input-group { margin-bottom: 20px; }
+
+.input-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-mid);
+  margin-bottom: 8px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: 1px solid var(--hair-dark);
+  border-radius: 4px;
+  font-size: 15px;
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover { background: var(--ink-soft); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+.login-help {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: var(--paper-warm);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+
+.login-help strong { color: var(--ink); font-weight: 600; }
+
+/* ============================================================
+   APP SHELL — sidebar + main
+   ============================================================ */
+#app { display: none; }
+#app.active { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 240px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+}
+
+.sidebar-brand {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid rgba(250,248,243,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-brand .logo-mark { width: 32px; height: 32px; font-size: 17px; }
+.sidebar-brand .logo-text { font-size: 16px; }
+
+.sidebar-section { padding: 24px 12px 8px; }
+.sidebar-section .eyebrow {
+  padding: 0 12px 8px;
+  color: rgba(250,248,243,0.4);
+  font-size: 9px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  color: rgba(250,248,243,0.7);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 1px 0;
+}
+
+.nav-item:hover { background: rgba(250,248,243,0.06); color: var(--paper); }
+.nav-item.active { background: rgba(196,154,61,0.16); color: var(--gold); }
+.nav-item.active .nav-icon { color: var(--gold); }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.8; }
+
+.sidebar-user {
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(250,248,243,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user-name { font-size: 13px; font-weight: 600; }
+.user-role { font-size: 11px; color: rgba(250,248,243,0.5); }
+.logout-btn { margin-left: auto; color: rgba(250,248,243,0.5); padding: 6px; }
+.logout-btn:hover { color: var(--paper); }
+
+.main {
+  flex: 1;
+  margin-left: 240px;
+  padding: 32px 40px 64px;
+  max-width: 1640px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--hair);
+}
+
+.page-header .eyebrow { margin-bottom: 8px; }
+
+.page-title {
+  font-family: 'Fraunces', serif;
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.page-meta { text-align: right; }
+.page-meta .label { font-size: 11px; color: var(--ink-light); letter-spacing: 0.08em; text-transform: uppercase; }
+.page-meta .value { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; margin-top: 2px; }
+
+/* ============================================================
+   KPI CARDS - DASHBOARD
+   ============================================================ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.kpi-card {
+  padding: 22px 24px;
+  border-right: 1px solid var(--hair);
+  position: relative;
+}
+
+.kpi-card:last-child { border-right: none; }
+
+.kpi-card .label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+}
+
+.kpi-card .value {
+  font-family: 'Fraunces', serif;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-card .sub {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--ink-light);
+}
+
+.kpi-card.alert .value { color: var(--crimson); }
+.kpi-card.warn .value { color: var(--gold); }
+.kpi-card.good .value { color: var(--teal); }
+
+/* Section blocks */
+.section {
+  background: var(--card);
+  border: 1px solid var(--hair);
+  border-radius: 6px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--paper-warm);
+}
+
+.section-header .title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.section-header .title small {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-light);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-left: 12px;
+}
+
+.section-body { padding: 24px; }
+
+.btn-ghost {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 7px 14px;
+  border: 1px solid var(--hair-dark);
+  border-radius: 3px;
+  color: var(--ink-soft);
+  background: var(--card);
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-ghost:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+
+/* Grids inside sections */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+
+/* ============================================================
+   TABLES
+   ============================================================ */
+table.data-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.data-table th {
+  text-align: left;
+  padding: 11px 16px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-light);
+  border-bottom: 1px solid var(--hair-dark);
+  background: var(--paper-warm);
+}
+
+.data-table td {
+  padding: 13px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--hair);
+  color: var(--ink-soft);
+}
+
+.data-table tbody tr { transition: background 0.12s; }
+.data-table tbody tr:hover { background: var(--paper); }
+.data-table tbody tr.clickable { cursor: pointer; }
+.data-table tbody tr.clickable:hover { background: var(--paper-warm); }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table .name-cell { font-weight: 600; color: var(--ink); }
+
+/* Pills */
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: capitalize;
+}
+.pill-good { background: var(--teal-soft); color: var(--teal); }
+.pill-warn { background: var(--gold-soft); color: var(--gold); }
+.pill-bad  { background: var(--crimson-soft); color: var(--crimson); }
+.pill-info { background: var(--blue-soft); color: var(--blue); }
+.pill-neutral { background: var(--paper-warm); color: var(--ink-mid); border: 1px solid var(--hair); }
+
+/* ============================================================
+   CHARTS
+   ============================================================ */
+.chart-wrap { position: relative; height: 260px; }
+.chart-wrap-sm { position: relative; height: 200px; }
+
+/* ============================================================
+   DEPT BARS / GEO SPLIT
+   ============================================================ */
+.dept-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px 60px 60px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.dept-row:last-child { border: none; }
+.dept-row .name { font-size: 13px; font-weight: 600; }
+.dept-row .bar-track { height: 8px; background: var(--paper-warm); border-radius: 999px; overflow: hidden; position: relative; }
+.dept-row .bar-fill { height: 100%; background: var(--ink); border-radius: 999px; transition: width 0.6s; }
+.dept-row .figure { text-align: right; font-size: 13px; font-variant-numeric: tabular-nums; }
+.dept-row .figure.bold { font-weight: 700; color: var(--ink); }
+
+.geo-block {
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 20px;
+  background: var(--paper);
+}
+.geo-block h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.geo-block .total { font-size: 12px; color: var(--ink-light); margin-bottom: 16px; }
+.geo-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.geo-stat .lbl { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-light); font-weight: 600; margin-bottom: 4px; }
+.geo-stat .val { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 500; }
+
+/* ============================================================
+   EMPLOYEE LIST
+   ============================================================ */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input, .filter-bar select {
+  padding: 10px 14px;
+  border: 1px solid var(--hair-dark);
+  border-radius: 3px;
+  background: var(--card);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.filter-bar input { min-width: 260px; }
+.filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: var(--ink); }
+
+.filter-bar .spacer { flex: 1; }
+.results-count { font-size: 12px; color: var(--ink-light); }
+
+/* ============================================================
+   EMPLOYEE PROFILE
+   ============================================================ */
+.profile-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 36px 40px;
+  margin: -32px -40px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 50%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(196,154,61,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(250,248,243,0.7);
+  margin-bottom: 20px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+}
+
+.back-link:hover { color: var(--paper); }
+
+.profile-top { display: flex; align-items: flex-end; gap: 24px; position: relative; z-index: 2; }
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-size: 38px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.profile-id { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,248,243,0.5); margin-bottom: 6px; }
+.profile-name { font-family: 'Fraunces', serif; font-size: 42px; font-weight: 500; line-height: 1; margin-bottom: 8px; letter-spacing: -0.02em; }
+.profile-role { font-size: 15px; color: rgba(250,248,243,0.75); }
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 28px;
+  border-top: 1px solid rgba(250,248,243,0.12);
+  padding-top: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-stat { padding-right: 24px; border-right: 1px solid rgba(250,248,243,0.1); }
+.profile-stat:last-child { border-right: none; }
+.profile-stat .lbl { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,248,243,0.5); font-weight: 600; margin-bottom: 8px; }
+.profile-stat .val { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; }
+.profile-stat .val.alert { color: #FF8870; }
+.profile-stat .val.warn  { color: #F4C95D; }
+.profile-stat .val.good  { color: #7FCFC1; }
+
+/* Info grid */
+.info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: var(--card); border: 1px solid var(--hair); border-radius: 6px; overflow: hidden; margin-bottom: 24px; }
+.info-cell { padding: 18px 20px; border-right: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+.info-cell:nth-child(4n) { border-right: none; }
+.info-cell:nth-last-child(-n+4) { border-bottom: none; }
+.info-cell .lbl { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--ink-light); margin-bottom: 6px; }
+.info-cell .val { font-size: 14px; color: var(--ink); font-weight: 500; }
+
+/* Mini payslip */
+.payslip {
+  background: var(--paper);
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+.payslip-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--hair);
+  font-size: 13px;
+}
+
+.payslip-row:last-of-type { border: none; }
+.payslip-row.section-row {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-light);
+  border: none;
+  padding-top: 18px;
+  padding-bottom: 6px;
+}
+
+.payslip-row .label { color: var(--ink-mid); }
+.payslip-row .value { font-weight: 500; color: var(--ink); }
+.payslip-row .value.minus { color: var(--crimson); }
+
+.payslip-total {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 16px 0 4px;
+  border-top: 2px solid var(--ink);
+  margin-top: 12px;
+  align-items: baseline;
+}
+
+.payslip-total .label { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; }
+.payslip-total .value { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 500; }
+
+/* Leave balance bar */
+.leave-bar { margin-bottom: 16px; }
+.leave-bar:last-child { margin-bottom: 0; }
+.leave-bar .top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+.leave-bar .top .label { color: var(--ink-mid); font-weight: 600; letter-spacing: 0.04em; }
+.leave-bar .top .num { font-family: 'JetBrains Mono', monospace; color: var(--ink-light); }
+.leave-bar .top .num strong { color: var(--ink); }
+.leave-bar .track { height: 6px; background: var(--paper-warm); border-radius: 999px; overflow: hidden; }
+.leave-bar .fill { height: 100%; border-radius: 999px; background: var(--teal); transition: width 0.5s; }
+.leave-bar.low .fill { background: var(--gold); }
+.leave-bar.crit .fill { background: var(--crimson); }
+
+/* Risk gauge */
+.risk-gauge {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.gauge-circle {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.gauge-circle.low { background: var(--teal-soft); color: var(--teal); }
+.gauge-circle.med { background: var(--gold-soft); color: var(--gold); }
+.gauge-circle.high { background: var(--crimson-soft); color: var(--crimson); }
+
+.gauge-num { font-family: 'Fraunces', serif; font-size: 44px; font-weight: 500; line-height: 1; }
+.gauge-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-top: 4px; }
+
+.risk-factors { flex: 1; }
+.risk-factor {
+  display: grid;
+  grid-template-columns: 1fr auto 80px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--hair);
+  font-size: 13px;
+}
+.risk-factor:last-child { border: none; }
+.risk-factor .lbl { color: var(--ink-mid); }
+.risk-factor .num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink); font-weight: 600; }
+.risk-factor .bar-mini { height: 4px; background: var(--paper-warm); border-radius: 999px; overflow: hidden; }
+.risk-factor .bar-mini .fill { height: 100%; background: var(--ink); border-radius: 999px; }
+
+/* Goals list */
+.goal-card {
+  border: 1px solid var(--hair);
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.goal-card:last-child { margin-bottom: 0; }
+.goal-card .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 12px; }
+.goal-card .title { font-weight: 600; font-size: 14px; }
+.goal-card .desc { font-size: 12px; color: var(--ink-light); margin-top: 2px; }
+.goal-card .progress { display: flex; align-items: center; gap: 12px; }
+.goal-card .pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; width: 44px; text-align: right; }
+.goal-card .track { flex: 1; height: 6px; background: var(--paper-warm); border-radius: 999px; overflow: hidden; }
+.goal-card .fill { height: 100%; border-radius: 999px; background: var(--teal); }
+.goal-card .fill.warn { background: var(--gold); }
+.goal-card .fill.crit { background: var(--crimson); }
+.goal-card .meta { display: flex; gap: 16px; font-size: 11px; color: var(--ink-light); margin-top: 10px; font-variant-numeric: tabular-nums; }
+.goal-card .meta strong { color: var(--ink); }
+
+/* Star rating */
+.stars { display: inline-flex; gap: 1px; align-items: baseline; }
+.stars .star { color: var(--hair-dark); font-size: 13px; }
+.stars .star.filled { color: var(--gold); }
+
+/* Training row */
+.train-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 40px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 13px;
+}
+.train-row:last-child { border: none; }
+.train-row .title { font-weight: 600; }
+.train-row .cat { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+.train-row .track { height: 5px; background: var(--paper-warm); border-radius: 999px; overflow: hidden; }
+.train-row .fill { height: 100%; background: var(--teal); border-radius: 999px; }
+.train-row .pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-align: right; font-weight: 600; }
+
+/* Funnel */
+.funnel { padding: 8px 0; }
+.funnel-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 14px; padding: 8px 0; }
+.funnel-row .name { font-size: 12px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-mid); text-align: right; }
+.funnel-row .bar { height: 36px; border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; transition: width 0.5s; }
+.funnel-row .num { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); font-weight: 600; }
+
+.funnel-row .bar.s1 { background: #6B7C95; }
+.funnel-row .bar.s2 { background: var(--blue); }
+.funnel-row .bar.s3 { background: var(--violet); }
+.funnel-row .bar.s4 { background: var(--gold); }
+.funnel-row .bar.s5 { background: var(--teal); }
+
+/* Compliance row */
+.comp-row {
+  display: grid;
+  grid-template-columns: 1fr 90px 80px 110px;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hair);
+  align-items: center;
+  font-size: 13px;
+}
+.comp-row:last-child { border: none; }
+.comp-row .title { font-weight: 600; }
+.comp-row .meta { font-size: 11px; color: var(--ink-light); margin-top: 2px; }
+.comp-row .date { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.comp-row .days { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 500; text-align: center; }
+.comp-row .days.bad { color: var(--crimson); }
+.comp-row .days.warn { color: var(--gold); }
+
+/* Section nav pills (inside profile) */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--paper-warm);
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.tab {
+  padding: 9px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+.tab:hover:not(.active) { color: var(--ink); }
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* Empty state */
+.empty {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ink-light);
+  font-size: 13px;
+}
+
+/* Hide pages */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Print fix */
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+<div id="login-screen">
+  <div class="login-left">
+    <div class="login-logo">
+      <div class="logo-mark">M</div>
+      <div class="logo-text">Meridian HR</div>
+    </div>
+
+    <div class="login-quote">
+      <div class="big">Workforce<br/><em>intelligence</em>,<br/>at a glance.</div>
+      <div class="sub">A single source of truth for your people — payroll, performance, compliance, and predictive attrition risk across India and US operations.</div>
+    </div>
+
+    <div class="login-footer">
+      <span>Confidential</span>
+      <span>v 4.2.0</span>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Welcome back</h2>
+      <p class="lc-sub">Sign in to your HR workspace</p>
+
+      <form id="login-form">
+        <div class="input-group">
+          <label class="input-label" for="email">Work Email</label>
+          <input class="input-field" type="email" id="email" placeholder="you@company.com" value="hr.admin@meridian.co" required>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="password">Password</label>
+          <input class="input-field" type="password" id="password" placeholder="••••••••" value="demopassword" required>
+        </div>
+
+        <button class="btn-primary" type="submit">Sign In →</button>
+      </form>
+
+      <div class="login-help">
+        <strong>Demo mode.</strong> Any email and password will sign you in — this is a portfolio demonstration, not a production deployment.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-mark">M</div>
+      <div class="logo-text">Meridian HR</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="eyebrow">Overview</div>
+      <div class="nav-item active" data-page="dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" data-page="employees">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Employees
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="eyebrow">Operations</div>
+      <div class="nav-item" data-page="payroll">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Payroll
+      </div>
+      <div class="nav-item" data-page="attendance">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Attendance & Leave
+      </div>
+      <div class="nav-item" data-page="performance">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="14 7 21 7 21 14"/></svg>
+        Performance
+      </div>
+      <div class="nav-item" data-page="recruitment">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Recruitment
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="eyebrow">Insights</div>
+      <div class="nav-item" data-page="compliance">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Compliance
+      </div>
+      <div class="nav-item" data-page="training">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/></svg>
+        Training
+      </div>
+      <div class="nav-item" data-page="risk">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="0.5"/></svg>
+        Attrition Risk
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="user-avatar">HR</div>
+      <div>
+        <div class="user-name" id="user-name">HR Admin</div>
+        <div class="user-role">Administrator</div>
+      </div>
+      <button class="logout-btn" id="logout-btn" title="Sign out">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main" id="main-content">
+    <!-- Pages get rendered here -->
+  </main>
+</div>
+
+<script>
+// ============================================================
+// DATA — injected at build time
+// ============================================================
+const DATA = /*__DATA_PLACEHOLDER__*/null;
+
+// ============================================================
+// UTILITIES
+// ============================================================
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+function fmtNum(n) { return n.toLocaleString('en-IN'); }
+function fmtINR(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+function fmtUSD(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+function fmtMoney(n, ccy) { return ccy === 'INR' ? fmtINR(n) : fmtUSD(n); }
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function fmtDateShort(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+}
+
+function daysBetween(d1, d2) {
+  return Math.round((new Date(d2) - new Date(d1)) / (1000*60*60*24));
+}
+
+function initials(name) {
+  return name.split(' ').map(s => s[0]).slice(0, 2).join('').toUpperCase();
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+const TODAY = new Date(DATA.meta.report_date);
+
+const allEmployees = [
+  ...DATA.india_employees.map(e => ({...e, geo: 'India'})),
+  ...DATA.us_employees.map(e => ({...e, geo: 'US'}))
+];
+
+const activeEmployees = allEmployees.filter(e => e.status !== 'Offboarded');
+
+const empById = id => allEmployees.find(e => e.id === id);
+
+// ============================================================
+// CSV EXPORT
+// ============================================================
+function exportCSV(filename, rows, columns) {
+  // columns = [{key, label, format?}]
+  const header = columns.map(c => `"${c.label}"`).join(',');
+  const body = rows.map(r =>
+    columns.map(c => {
+      let v = r[c.key];
+      if (c.format) v = c.format(v, r);
+      if (v === null || v === undefined) v = '';
+      v = String(v).replace(/"/g, '""');
+      return `"${v}"`;
+    }).join(',')
+  ).join('\n');
+
+  const csv = header + '\n' + body;
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+function exportFullReport() {
+  // Combine everything into one CSV-like — actually export multiple CSVs in a ZIP-less way
+  // We'll do a single comprehensive Employee Master export
+  const cols = [
+    {key: 'id', label: 'Employee ID'},
+    {key: 'name', label: 'Name'},
+    {key: 'geo', label: 'Geography'},
+    {key: 'dept', label: 'Department'},
+    {key: 'desig', label: 'Designation'},
+    {key: 'manager', label: 'Reporting Manager'},
+    {key: 'skill', label: 'Skillset'},
+    {key: 'doj', label: 'Date of Joining'},
+    {key: 'status', label: 'Status'},
+    {key: 'intern_end', label: 'Intern End Date'},
+    {key: 'lwd', label: 'Last Working Day'},
+  ];
+
+  // Enrich with payroll, leave, attrition
+  const payById = Object.fromEntries(DATA.payroll.map(p => [p.id, p]));
+  const leaveById = Object.fromEntries(DATA.leaves.map(l => [l.id, l]));
+  const attrById = Object.fromEntries(DATA.attrition_risk.map(a => [a.id, a]));
+  const prodById = Object.fromEntries(DATA.productivity.map(p => [p.id, p]));
+
+  const enriched = allEmployees.map(e => {
+    const p = payById[e.id] || {};
+    const l = leaveById[e.id] || {};
+    const a = attrById[e.id] || {};
+    const pr = prodById[e.id] || {};
+    return {
+      ...e,
+      ctc: p.ctc || '',
+      monthly_gross: p.gross || '',
+      monthly_net: p.net || '',
+      currency: p.currency || '',
+      cl_balance: l.cl_balance ?? '',
+      sl_balance: l.sl_balance ?? '',
+      el_balance: l.el_balance ?? '',
+      attendance_pct: l.attendance_pct ? l.attendance_pct.toFixed(1) + '%' : '',
+      productivity_score: pr.score || '',
+      attrition_risk: a.risk_level || '',
+      attrition_score: a.total_score || '',
+    };
+  });
+
+  const fullCols = [
+    ...cols,
+    {key: 'ctc', label: 'Annual CTC'},
+    {key: 'monthly_gross', label: 'Monthly Gross'},
+    {key: 'monthly_net', label: 'Monthly Net'},
+    {key: 'currency', label: 'Currency'},
+    {key: 'cl_balance', label: 'CL/PTO Balance'},
+    {key: 'sl_balance', label: 'SL/Sick Balance'},
+    {key: 'el_balance', label: 'EL Balance'},
+    {key: 'attendance_pct', label: 'Attendance %'},
+    {key: 'productivity_score', label: 'Productivity Score'},
+    {key: 'attrition_risk', label: 'Attrition Risk'},
+    {key: 'attrition_score', label: 'Risk Score'},
+  ];
+
+  exportCSV('meridian_hr_full_export.csv', enriched, fullCols);
+}
+
+// ============================================================
+// ROUTER
+// ============================================================
+let currentPage = 'dashboard';
+let currentEmployee = null;
+
+function navigate(page, payload) {
+  currentPage = page;
+  // Update sidebar active state
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === page));
+
+  const main = $('#main-content');
+  main.scrollTo(0, 0);
+  window.scrollTo(0, 0);
+
+  switch(page) {
+    case 'dashboard': renderDashboard(main); break;
+    case 'employees': renderEmployees(main); break;
+    case 'employee-profile': renderEmployeeProfile(main, payload); break;
+    case 'payroll': renderPayroll(main); break;
+    case 'attendance': renderAttendance(main); break;
+    case 'performance': renderPerformance(main); break;
+    case 'recruitment': renderRecruitment(main); break;
+    case 'compliance': renderCompliance(main); break;
+    case 'training': renderTraining(main); break;
+    case 'risk': renderRiskPage(main); break;
+  }
+}
+
+// ============================================================
+// PAGE: DASHBOARD
+// ============================================================
+function renderDashboard(main) {
+  const activeCount = activeEmployees.length;
+  const confirmed = activeEmployees.filter(e => e.status === 'Confirmed').length;
+  const interns = activeEmployees.filter(e => e.status === 'Intern').length;
+  const probation = activeEmployees.filter(e => e.status === 'Under Probation').length;
+
+  // Intern alerts ≤45 days
+  const internAlerts = activeEmployees.filter(e => {
+    if (!e.intern_end) return false;
+    const d = daysBetween(TODAY, e.intern_end);
+    return d >= 0 && d <= 45;
+  }).sort((a, b) => new Date(a.intern_end) - new Date(b.intern_end));
+
+  // Probation ≤30 days
+  const probationAlerts = activeEmployees.filter(e => {
+    if (e.status !== 'Under Probation' || !e.doj) return false;
+    const probEnd = new Date(e.doj);
+    probEnd.setDate(probEnd.getDate() + 180);
+    const d = daysBetween(TODAY, probEnd);
+    return d >= 0 && d <= 30;
+  });
+
+  // Quarterly attrition - current Q
+  const currQ = `Q${Math.ceil((TODAY.getMonth()+1)/3)}-${TODAY.getFullYear()}`;
+  const currentQExits = DATA.offboarded.filter(o => {
+    if (!o.lwd) return false;
+    const d = new Date(o.lwd);
+    return Math.ceil((d.getMonth()+1)/3) === Math.ceil((TODAY.getMonth()+1)/3) && d.getFullYear() === TODAY.getFullYear();
+  }).length;
+  const attrPct = ((currentQExits / activeCount) * 100).toFixed(1);
+
+  // Risk counts
+  const openRisks = DATA.risks.filter(r => r.status !== 'Closed').length;
+  const attrHigh = DATA.attrition_risk.filter(r => r.risk_level === 'High').length;
+  const attrMed = DATA.attrition_risk.filter(r => r.risk_level === 'Medium').length;
+  const attrLow = DATA.attrition_risk.filter(r => r.risk_level === 'Low').length;
+
+  // Compliance
+  const overdue = DATA.compliance.filter(c => daysBetween(TODAY, c.due_date) < 0).length;
+  const critical = DATA.compliance.filter(c => {
+    const d = daysBetween(TODAY, c.due_date);
+    return d >= 0 && d <= 7;
+  }).length;
+
+  // Payroll totals
+  const indiaPay = DATA.payroll.filter(p => p.currency === 'INR');
+  const usPay = DATA.payroll.filter(p => p.currency === 'USD');
+  const indiaMonthly = indiaPay.reduce((s, p) => s + p.gross, 0);
+  const usMonthly = usPay.reduce((s, p) => s + p.gross, 0);
+
+  // Department breakdown
+  const deptMap = {};
+  activeEmployees.forEach(e => {
+    if (!deptMap[e.dept]) deptMap[e.dept] = { india: 0, us: 0 };
+    if (e.geo === 'India') deptMap[e.dept].india++; else deptMap[e.dept].us++;
+  });
+  const deptRows = Object.entries(deptMap)
+    .map(([d, v]) => ({ dept: d, india: v.india, us: v.us, total: v.india + v.us }))
+    .sort((a, b) => b.total - a.total);
+  const maxDept = Math.max(...deptRows.map(r => r.total));
+
+  // Top attrition risk
+  const topAttr = [...DATA.attrition_risk].sort((a, b) => b.total_score - a.total_score).slice(0, 6);
+
+  // Upcoming compliance
+  const upcomingComp = DATA.compliance
+    .map(c => ({...c, days: daysBetween(TODAY, c.due_date)}))
+    .sort((a, b) => a.days - b.days)
+    .slice(0, 5);
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div>
+        <div class="eyebrow">Overview</div>
+        <div class="page-title">Workforce Dashboard</div>
+      </div>
+      <div class="page-meta">
+        <div class="label">Report Date</div>
+        <div class="value">${fmtDate(DATA.meta.report_date)}</div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="label">Total Active</div>
+        <div class="value">${activeCount}</div>
+        <div class="sub">India ${activeEmployees.filter(e=>e.geo==='India').length} · US ${activeEmployees.filter(e=>e.geo==='US').length}</div>
+      </div>
+      <div class="kpi-card good">
+        <div class="label">Confirmed</div>
+        <div class="value">${confirmed}</div>
+        <div class="sub">${((confirmed/activeCount)*100).toFixed(0)}% of active</div>
+      </div>
+      <div class="kpi-card">
+        <div class="label">Total Interns</div>
+        <div class="value">${interns}</div>
+        <div class="sub">${probation} on probation</div>
+      </div>
+      <div class="kpi-card alert">
+        <div class="label">Intern LWD ≤ 45d</div>
+        <div class="value">${internAlerts.length}</div>
+        <div class="sub">Action: confirm or exit</div>
+      </div>
+      <div class="kpi-card warn">
+        <div class="label">Probation Due ≤ 30d</div>
+        <div class="value">${probationAlerts.length}</div>
+        <div class="sub">Action: complete review</div>
+      </div>
+      <div class="kpi-card alert">
+        <div class="label">Attrition (Curr Q)</div>
+        <div class="value">${attrPct}%</div>
+        <div class="sub">${currentQExits} exits this quarter</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Headcount by Department <small>${deptRows.length} departments</small></div>
+        </div>
+        <div class="section-body">
+          ${deptRows.map(r => `
+            <div class="dept-row">
+              <div class="name">${escapeHtml(r.dept)}</div>
+              <div class="bar-track"><div class="bar-fill" style="width:${(r.total/maxDept*100).toFixed(0)}%"></div></div>
+              <div class="figure mono">${r.india}</div>
+              <div class="figure mono">${r.us}</div>
+              <div class="figure bold mono">${r.total}</div>
+            </div>
+          `).join('')}
+          <div style="display:grid;grid-template-columns:140px 1fr 60px 60px 60px;gap:16px;padding-top:12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-light);font-weight:600;">
+            <span></span><span></span><span style="text-align:right">India</span><span style="text-align:right">US</span><span style="text-align:right">Total</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Compensation & Productivity <small>Live snapshot</small></div>
+        </div>
+        <div class="section-body" style="padding:16px 24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--hair);border-radius:4px;overflow:hidden;margin-bottom:16px">
+            <div style="padding:18px 20px;border-right:1px solid var(--hair);background:var(--paper)">
+              <div class="eyebrow" style="margin-bottom:8px">India Monthly</div>
+              <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:500;font-variant-numeric:tabular-nums">${fmtINR(indiaMonthly)}</div>
+              <div style="font-size:11px;color:var(--ink-light);margin-top:4px">${indiaPay.length} employees</div>
+            </div>
+            <div style="padding:18px 20px;background:var(--paper)">
+              <div class="eyebrow" style="margin-bottom:8px">US Monthly</div>
+              <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:500;font-variant-numeric:tabular-nums">${fmtUSD(usMonthly)}</div>
+              <div style="font-size:11px;color:var(--ink-light);margin-top:4px">${usPay.length} employees</div>
+            </div>
+          </div>
+          <div class="chart-wrap-sm"><canvas id="prodChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Quarterly Attrition Trend <small>Last 5 quarters</small></div>
+        </div>
+        <div class="section-body"><div class="chart-wrap"><canvas id="attrChart"></canvas></div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Attrition Risk Distribution <small>Predictive model</small></div>
+          <button class="btn-ghost" onclick="navigate('risk')">View all →</button>
+        </div>
+        <div class="section-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px">
+            <div style="padding:14px;background:var(--crimson-soft);border-radius:4px;text-align:center">
+              <div class="eyebrow" style="color:var(--crimson);margin-bottom:4px">High Risk</div>
+              <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:var(--crimson)">${attrHigh}</div>
+            </div>
+            <div style="padding:14px;background:var(--gold-soft);border-radius:4px;text-align:center">
+              <div class="eyebrow" style="color:var(--gold);margin-bottom:4px">Medium</div>
+              <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:var(--gold)">${attrMed}</div>
+            </div>
+            <div style="padding:14px;background:var(--teal-soft);border-radius:4px;text-align:center">
+              <div class="eyebrow" style="color:var(--teal);margin-bottom:4px">Low Risk</div>
+              <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:var(--teal)">${attrLow}</div>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Top at-risk</th><th>Dept</th><th class="num">Score</th><th>Reason</th></tr></thead>
+            <tbody>
+              ${topAttr.map(a => `
+                <tr class="clickable" onclick="navigate('employee-profile','${a.id}')">
+                  <td class="name-cell">${escapeHtml(a.name)}</td>
+                  <td>${escapeHtml(a.dept)}</td>
+                  <td class="num"><span class="pill pill-bad">${a.total_score}</span></td>
+                  <td style="font-size:12px;color:var(--ink-light)">${escapeHtml(a.top_reason)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Intern LWD Alerts <small>Within 45 days</small></div>
+          <button class="btn-ghost" onclick="exportCSV('intern_alerts.csv', ${JSON.stringify(internAlerts).replace(/"/g, '&quot;')}, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'dept',label:'Dept'},{key:'intern_end',label:'End Date'}])">⬇ Export</button>
+        </div>
+        <div class="section-body" style="padding:0">
+          ${internAlerts.length === 0 ? '<div class="empty">No upcoming intern transitions.</div>' :
+          `<table class="data-table">
+            <thead><tr><th>Employee</th><th>Dept</th><th>End Date</th><th class="num">Days</th></tr></thead>
+            <tbody>
+              ${internAlerts.map(e => {
+                const days = daysBetween(TODAY, e.intern_end);
+                const cls = days <= 14 ? 'pill-bad' : (days <= 30 ? 'pill-warn' : 'pill-info');
+                return `<tr class="clickable" onclick="navigate('employee-profile','${e.id}')">
+                  <td class="name-cell">${escapeHtml(e.name)}</td>
+                  <td>${escapeHtml(e.dept)}</td>
+                  <td class="mono">${fmtDateShort(e.intern_end)}</td>
+                  <td class="num"><span class="pill ${cls}">${days}d</span></td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>`}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Compliance Alerts <small>Statutory deadlines</small></div>
+          <button class="btn-ghost" onclick="navigate('compliance')">View calendar →</button>
+        </div>
+        <div class="section-body" style="padding:0">
+          <table class="data-table">
+            <thead><tr><th>Event</th><th>Geo</th><th>Due</th><th class="num">Days</th><th>Status</th></tr></thead>
+            <tbody>
+              ${upcomingComp.map(c => {
+                const cls = c.days < 0 ? 'pill-bad' : (c.days <= 7 ? 'pill-bad' : (c.days <= 30 ? 'pill-warn' : 'pill-good'));
+                const statusLbl = c.days < 0 ? 'Overdue' : (c.days <= 7 ? 'Critical' : (c.days <= 30 ? 'Upcoming' : 'Scheduled'));
+                return `<tr>
+                  <td class="name-cell" style="font-size:12px">${escapeHtml(c.title)}</td>
+                  <td>${escapeHtml(c.geo)}</td>
+                  <td class="mono">${fmtDateShort(c.due_date)}</td>
+                  <td class="num mono">${c.days}d</td>
+                  <td><span class="pill ${cls}">${statusLbl}</span></td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="title">Export Reports <small>Download for offline analysis</small></div>
+      </div>
+      <div class="section-body" style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn-ghost" onclick="exportFullReport()">⬇ Full Workforce Report (CSV)</button>
+        <button class="btn-ghost" onclick="exportCSV('india_employees.csv', DATA.india_employees, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'dept',label:'Dept'},{key:'desig',label:'Designation'},{key:'manager',label:'Manager'},{key:'doj',label:'DOJ'},{key:'status',label:'Status'}])">⬇ India Employees</button>
+        <button class="btn-ghost" onclick="exportCSV('us_employees.csv', DATA.us_employees, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'dept',label:'Dept'},{key:'desig',label:'Designation'},{key:'manager',label:'Manager'},{key:'doj',label:'DOJ'},{key:'status',label:'Status'}])">⬇ US Employees</button>
+        <button class="btn-ghost" onclick="exportCSV('payroll.csv', DATA.payroll, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'geo',label:'Geo'},{key:'ctc',label:'CTC'},{key:'gross',label:'Gross'},{key:'net',label:'Net'},{key:'currency',label:'Currency'}])">⬇ Payroll</button>
+        <button class="btn-ghost" onclick="exportCSV('attrition_risk.csv', DATA.attrition_risk, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'dept',label:'Dept'},{key:'total_score',label:'Score'},{key:'risk_level',label:'Risk'},{key:'top_reason',label:'Reason'}])">⬇ Attrition Risk</button>
+        <button class="btn-ghost" onclick="exportCSV('risks.csv', DATA.risks, [{key:'risk_id',label:'Risk ID'},{key:'emp_name',label:'Employee'},{key:'category',label:'Category'},{key:'level',label:'Level'},{key:'status',label:'Status'},{key:'notes',label:'Notes'}])">⬇ Risk Report</button>
+      </div>
+    </div>
+  `;
+
+  // Build charts
+  const quartersList = [];
+  const quartersData = { india: [], us: [] };
+  // Generate last 5 quarters
+  const quartersByKey = {};
+  DATA.offboarded.forEach(o => {
+    if (!o.lwd) return;
+    const d = new Date(o.lwd);
+    const q = `Q${Math.ceil((d.getMonth()+1)/3)}-${d.getFullYear()}`;
+    if (!quartersByKey[q]) quartersByKey[q] = { india: 0, us: 0 };
+    if (o.geo === 'India') quartersByKey[q].india++; else quartersByKey[q].us++;
+  });
+  const sortedQuarters = Object.keys(quartersByKey).sort((a, b) => {
+    const [qa, ya] = a.split('-'); const [qb, yb] = b.split('-');
+    if (ya !== yb) return parseInt(ya) - parseInt(yb);
+    return parseInt(qa.slice(1)) - parseInt(qb.slice(1));
+  }).slice(-5);
+
+  new Chart($('#attrChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: sortedQuarters,
+      datasets: [
+        { label: 'India', data: sortedQuarters.map(q => quartersByKey[q].india), backgroundColor: '#3B6CA8' },
+        { label: 'US', data: sortedQuarters.map(q => quartersByKey[q].us), backgroundColor: '#B23A2C' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { family: 'Manrope', size: 11 }, color: '#4B5563' }}},
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#6B7280' }},
+        y: { stacked: true, beginAtZero: true, grid: { color: '#E5DDD0' }, ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: '#6B7280', stepSize: 2 }}
+      }
+    }
+  });
+
+  // Productivity doughnut: avg by dept
+  const prodByDept = {};
+  DATA.productivity.forEach(p => {
+    if (!prodByDept[p.dept]) prodByDept[p.dept] = { sum: 0, n: 0 };
+    prodByDept[p.dept].sum += p.score; prodByDept[p.dept].n++;
+  });
+  const prodLabels = Object.keys(prodByDept);
+  const prodValues = prodLabels.map(d => (prodByDept[d].sum / prodByDept[d].n).toFixed(2));
+
+  new Chart($('#prodChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: prodLabels,
+      datasets: [{
+        label: 'Avg Productivity',
+        data: prodValues,
+        backgroundColor: '#2C7F76',
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.x} / 5.0` }}},
+      scales: {
+        x: { beginAtZero: true, max: 5, grid: { color: '#E5DDD0' }, ticks: { font: { family: 'JetBrains Mono', size: 10 }, color: '#6B7280' }},
+        y: { grid: { display: false }, ticks: { font: { family: 'Manrope', size: 11 }, color: '#4B5563' }}
+      }
+    }
+  });
+}
+
+// ============================================================
+// PAGE: EMPLOYEES LIST
+// ============================================================
+function renderEmployees(main) {
+  main.innerHTML = `
+    <div class="page-header">
+      <div>
+        <div class="eyebrow">Workforce</div>
+        <div class="page-title">All Employees</div>
+      </div>
+      <div class="page-meta">
+        <div class="label">Total Active</div>
+        <div class="value">${activeEmployees.length}</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <input type="text" id="emp-search" placeholder="Search by name, ID, or skill…">
+      <select id="emp-geo">
+        <option value="">All Geos</option>
+        <option value="India">India</option>
+        <option value="US">United States</option>
+      </select>
+      <select id="emp-dept">
+        <option value="">All Departments</option>
+        ${[...new Set(allEmployees.map(e => e.dept))].sort().map(d => `<option>${escapeHtml(d)}</option>`).join('')}
+      </select>
+      <select id="emp-status">
+        <option value="">All Statuses</option>
+        <option>Confirmed</option>
+        <option>Under Probation</option>
+        <option>Intern</option>
+      </select>
+      <div class="spacer"></div>
+      <span class="results-count" id="emp-count"></span>
+      <button class="btn-ghost" id="emp-export">⬇ Export CSV</button>
+    </div>
+
+    <div class="section">
+      <div class="section-body" style="padding:0">
+        <table class="data-table" id="emp-table">
+          <thead><tr>
+            <th>ID</th><th>Name</th><th>Geo</th><th>Department</th><th>Designation</th>
+            <th>Manager</th><th>DOJ</th><th>Status</th><th class="num">Risk</th>
+          </tr></thead>
+          <tbody id="emp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  function applyFilters() {
+    const q = $('#emp-search').value.toLowerCase();
+    const geo = $('#emp-geo').value;
+    const dept = $('#emp-dept').value;
+    const status = $('#emp-status').value;
+
+    const filtered = allEmployees.filter(e => {
+      if (geo && e.geo !== geo) return false;
+      if (dept && e.dept !== dept) return false;
+      if (status && e.status !== status) return false;
+      if (q) {
+        const hay = `${e.id} ${e.name} ${e.skill} ${e.desig}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    $('#emp-count').textContent = `${filtered.length} of ${allEmployees.length} employees`;
+
+    const attrMap = Object.fromEntries(DATA.attrition_risk.map(a => [a.id, a]));
+
+    $('#emp-tbody').innerHTML = filtered.map(e => {
+      const risk = attrMap[e.id];
+      const riskPill = risk ?
+        `<span class="pill pill-${risk.risk_level === 'High' ? 'bad' : (risk.risk_level === 'Medium' ? 'warn' : 'good')}">${risk.risk_level}</span>` :
+        '<span class="pill pill-neutral">—</span>';
+      const statusPill =
+        e.status === 'Confirmed' ? '<span class="pill pill-good">Confirmed</span>' :
+        e.status === 'Intern' ? '<span class="pill pill-info">Intern</span>' :
+        e.status === 'Under Probation' ? '<span class="pill pill-warn">Probation</span>' :
+        '<span class="pill pill-neutral">Offboarded</span>';
+      return `<tr class="clickable" onclick="navigate('employee-profile','${e.id}')">
+        <td class="mono" style="font-size:12px;color:var(--ink-light)">${e.id}</td>
+        <td class="name-cell">${escapeHtml(e.name)}</td>
+        <td>${e.geo}</td>
+        <td>${escapeHtml(e.dept)}</td>
+        <td>${escapeHtml(e.desig)}</td>
+        <td style="font-size:12px;color:var(--ink-light)">${escapeHtml(e.manager)}</td>
+        <td class="mono" style="font-size:12px">${fmtDateShort(e.doj)}</td>
+        <td>${statusPill}</td>
+        <td class="num">${riskPill}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="9" class="empty">No employees match the filter.</td></tr>';
+
+    $('#emp-export').onclick = () => exportCSV('employees_filtered.csv', filtered, [
+      {key:'id',label:'ID'},{key:'name',label:'Name'},{key:'geo',label:'Geo'},
+      {key:'dept',label:'Dept'},{key:'desig',label:'Designation'},
+      {key:'manager',label:'Manager'},{key:'doj',label:'DOJ'},{key:'status',label:'Status'}
+    ]);
+  }
+
+  ['#emp-search','#emp-geo','#emp-dept','#emp-status'].forEach(sel => $(sel).addEventListener('input', applyFilters));
+  applyFilters();
+}
+
+// ============================================================
+// PAGE: EMPLOYEE PROFILE  (360° view)
+// ============================================================
+function renderEmployeeProfile(main, empId) {
+  const e = empById(empId);
+  if (!e) { main.innerHTML = '<div class="empty">Employee not found.</div>'; return; }
+
+  const pay = DATA.payroll.find(p => p.id === empId);
+  const leave = DATA.leaves.find(l => l.id === empId);
+  const goals = DATA.goals.filter(g => g.emp_id === empId);
+  const trainings = DATA.training_enrollments.filter(t => t.emp_id === empId);
+  const attr = DATA.attrition_risk.find(a => a.id === empId);
+  const prod = DATA.productivity.find(p => p.id === empId);
+  const empRisks = DATA.risks.filter(r => r.emp_id === empId);
+
+  const tenureDays = e.doj ? daysBetween(e.doj, TODAY.toISOString().slice(0,10)) : 0;
+  const tenureYears = (tenureDays / 365).toFixed(1);
+
+  const avgRating = goals.length ? (goals.reduce((s,g) => s+g.rating, 0) / goals.length).toFixed(1) : '—';
+  const completedTrn = trainings.filter(t => t.status === 'Completed').length;
+
+  const statusPill =
+    e.status === 'Confirmed' ? 'pill-good' :
+    e.status === 'Intern' ? 'pill-info' :
+    e.status === 'Under Probation' ? 'pill-warn' : 'pill-neutral';
+
+  const riskClass = attr ? (attr.risk_level === 'High' ? 'high' : (attr.risk_level === 'Medium' ? 'med' : 'low')) : 'low';
+  const riskValClass = attr ? (attr.risk_level === 'High' ? 'alert' : (attr.risk_level === 'Medium' ? 'warn' : 'good')) : 'good';
+
+  main.innerHTML = `
+    <div class="profile-header">
+      <div class="back-link" onclick="navigate('employees')">← All Employees</div>
+      <div class="profile-top">
+        <div class="profile-avatar">${initials(e.name)}</div>
+        <div style="flex:1">
+          <div class="profile-id">${e.id} · ${e.geo === 'India' ? '🇮🇳 India' : '🇺🇸 United States'}</div>
+          <div class="profile-name">${escapeHtml(e.name)}</div>
+          <div class="profile-role">${escapeHtml(e.desig)} · ${escapeHtml(e.dept)} · Reports to ${escapeHtml(e.manager)}</div>
+        </div>
+        <span class="pill ${statusPill}" style="padding:6px 14px;font-size:12px">${escapeHtml(e.status)}</span>
+      </div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="lbl">Tenure</div>
+          <div class="val">${tenureYears}y</div>
+        </div>
+        <div class="profile-stat">
+          <div class="lbl">Productivity</div>
+          <div class="val ${prod && prod.score >= 4 ? 'good' : (prod && prod.score === 3 ? 'warn' : 'alert')}">${prod ? prod.score + '/5' : '—'}</div>
+        </div>
+        <div class="profile-stat">
+          <div class="lbl">Goal Rating</div>
+          <div class="val ${parseFloat(avgRating) >= 4 ? 'good' : (parseFloat(avgRating) >= 3 ? 'warn' : 'alert')}">${avgRating}</div>
+        </div>
+        <div class="profile-stat">
+          <div class="lbl">Attrition Risk</div>
+          <div class="val ${riskValClass}">${attr ? attr.risk_level : '—'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">Overview</div>
+      <div class="tab" data-tab="payroll">Payroll</div>
+      <div class="tab" data-tab="leave">Leave & Attendance</div>
+      <div class="tab" data-tab="performance">Performance</div>
+      <div class="tab" data-tab="training">Training</div>
+      <div class="tab" data-tab="risk">Risk Profile</div>
+    </div>
+
+    <button class="btn-ghost" style="float:right;margin-top:-58px;margin-right:0" onclick="exportEmployeeProfile('${empId}')">⬇ Export Profile (CSV)</button>
+
+    <!-- OVERVIEW -->
+    <div class="tab-pane active" data-tab-pane="overview">
+      <div class="section">
+        <div class="section-header"><div class="title">Personal Information</div></div>
+        <div class="info-grid">
+          <div class="info-cell"><div class="lbl">Employee ID</div><div class="val mono">${e.id}</div></div>
+          <div class="info-cell"><div class="lbl">Date of Joining</div><div class="val">${fmtDate(e.doj)}</div></div>
+          <div class="info-cell"><div class="lbl">Department</div><div class="val">${escapeHtml(e.dept)}</div></div>
+          <div class="info-cell"><div class="lbl">Designation</div><div class="val">${escapeHtml(e.desig)}</div></div>
+          <div class="info-cell"><div class="lbl">Reporting Manager</div><div class="val">${escapeHtml(e.manager)}</div></div>
+          <div class="info-cell"><div class="lbl">Skillset</div><div class="val">${escapeHtml(e.skill || '—')}</div></div>
+          <div class="info-cell"><div class="lbl">Geography</div><div class="val">${e.geo === 'India' ? '🇮🇳 India' : '🇺🇸 United States'}</div></div>
+          <div class="info-cell"><div class="lbl">${e.status === 'Intern' ? 'Intern End Date' : 'Last Working Day'}</div><div class="val">${fmtDate(e.intern_end || e.lwd) || '—'}</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="section">
+          <div class="section-header"><div class="title">Compensation Snapshot</div></div>
+          <div class="section-body">
+            ${pay ? `
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div><div class="eyebrow">Annual CTC</div><div style="font-family:'Fraunces',serif;font-size:30px;font-weight:500;margin-top:6px">${fmtMoney(pay.ctc, pay.currency)}</div></div>
+                <div><div class="eyebrow">Monthly Net</div><div style="font-family:'Fraunces',serif;font-size:30px;font-weight:500;margin-top:6px;color:var(--teal)">${fmtMoney(pay.net, pay.currency)}</div></div>
+              </div>
+            ` : '<div class="empty">No payroll record.</div>'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header"><div class="title">Attrition Risk Breakdown</div></div>
+          <div class="section-body">
+            ${attr ? `
+            <div class="risk-gauge">
+              <div class="gauge-circle ${riskClass}">
+                <div class="gauge-num">${attr.total_score}</div>
+                <div class="gauge-label">${attr.risk_level}</div>
+              </div>
+              <div class="risk-factors">
+                ${[
+                  {lbl: 'Tenure score', val: attr.tenure_score},
+                  {lbl: 'Productivity score', val: attr.prod_score},
+                  {lbl: 'Comp-ratio score', val: attr.comp_score},
+                  {lbl: 'Other factors', val: attr.other_score}
+                ].map(f => `
+                  <div class="risk-factor">
+                    <div class="lbl">${f.lbl}</div>
+                    <div class="num">+${f.val}</div>
+                    <div class="bar-mini"><div class="fill" style="width:${(f.val/50*100).toFixed(0)}%"></div></div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div style="margin-top:14px;padding:12px;background:var(--paper-warm);border-radius:4px;font-size:12px"><strong>Top reason:</strong> ${escapeHtml(attr.top_reason)}</div>
+            ` : '<div class="empty">No risk score available.</div>'}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYROLL -->
+    <div class="tab-pane" data-tab-pane="payroll">
+      <div class="grid-2">
+        <div class="section">
+          <div class="section-header"><div class="title">Monthly Payslip</div></div>
+          <div class="section-body">
+            ${pay ? `
+            <div class="payslip">
+              <div class="payslip-row section-row">Earnings</div>
+              <div class="payslip-row"><div class="label">Basic Salary</div><div class="value">${fmtMoney(pay.basic, pay.currency)}</div></div>
+              ${pay.hra > 0 ? `<div class="payslip-row"><div class="label">HRA</div><div class="value">${fmtMoney(pay.hra, pay.currency)}</div></div>` : ''}
+              ${pay.special > 0 ? `<div class="payslip-row"><div class="label">Special Allowance</div><div class="value">${fmtMoney(pay.special, pay.currency)}</div></div>` : ''}
+              <div class="payslip-row" style="font-weight:600;padding-top:14px"><div class="label">Gross Earnings</div><div class="value">${fmtMoney(pay.gross, pay.currency)}</div></div>
+
+              <div class="payslip-row section-row">Deductions</div>
+              ${pay.currency === 'INR' ? `
+                <div class="payslip-row"><div class="label">PF (Employee 12%)</div><div class="value minus">−${fmtINR(pay.pf_emp)}</div></div>
+                ${pay.esi > 0 ? `<div class="payslip-row"><div class="label">ESI (0.75%)</div><div class="value minus">−${fmtINR(pay.esi)}</div></div>` : ''}
+                <div class="payslip-row"><div class="label">Professional Tax</div><div class="value minus">−${fmtINR(pay.pt)}</div></div>
+                <div class="payslip-row"><div class="label">TDS (Income Tax)</div><div class="value minus">−${fmtINR(pay.tds)}</div></div>
+              ` : `
+                <div class="payslip-row"><div class="label">Federal Income Tax</div><div class="value minus">−${fmtUSD(pay.pf_emp)}</div></div>
+                <div class="payslip-row"><div class="label">Social Security (6.2%)</div><div class="value minus">−${fmtUSD(pay.esi)}</div></div>
+                <div class="payslip-row"><div class="label">Medicare (1.45%)</div><div class="value minus">−${fmtUSD(pay.pt)}</div></div>
+                <div class="payslip-row"><div class="label">State Tax (5%)</div><div class="value minus">−${fmtUSD(pay.tds)}</div></div>
+              `}
+
+              <div class="payslip-total">
+                <div class="label">Net Pay</div>
+                <div class="value">${fmtMoney(pay.net, pay.currency)}</div>
+              </div>
+            </div>
+            ` : '<div class="empty">No payroll record.</div>'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header"><div class="title">Annual Compensation</div></div>
+          <div class="section-body">
+            ${pay ? `
+              <div style="text-align:center;padding:20px 0">
+                <div class="eyebrow">Total Annual CTC</div>
+                <div style="font-family:'Fraunces',serif;font-size:56px;font-weight:500;margin-top:8px;letter-spacing:-0.02em">${fmtMoney(pay.ctc, pay.currency)}</div>
+                <div style="color:var(--ink-light);margin-top:4px">${pay.currency === 'INR' ? 'Indian Rupees' : 'US Dollars'}</div>
+              </div>
+              <div style="border-top:1px solid var(--hair);padding-top:16px;margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:center">
+                <div>
+                  <div class="eyebrow">Monthly Gross</div>
+                  <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:4px">${fmtMoney(pay.gross, pay.currency)}</div>
+                </div>
+                <div>
+                  <div class="eyebrow">Annual Take-Home</div>
+                  <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:4px;color:var(--teal)">${fmtMoney(pay.net*12, pay.currency)}</div>
+                </div>
+              </div>
+            ` : '<div class="empty">No payroll record.</div>'}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEAVE -->
+    <div class="tab-pane" data-tab-pane="leave">
+      <div class="grid-2">
+        <div class="section">
+          <div class="section-header"><div class="title">Leave Balances</div></div>
+          <div class="section-body">
+            ${leave ? `
+              ${[
+                {lbl: e.geo === 'India' ? 'Casual Leave (CL)' : 'Paid Time Off (PTO)', ent: leave.cl_entitled, used: leave.cl_used, bal: leave.cl_balance},
+                {lbl: e.geo === 'India' ? 'Sick Leave (SL)' : 'Sick Leave', ent: leave.sl_entitled, used: leave.sl_used, bal: leave.sl_balance},
+                ...(leave.el_entitled > 0 ? [{lbl: 'Earned Leave (EL)', ent: leave.el_entitled, used: leave.el_used, bal: leave.el_balance}] : [])
+              ].map(L => {
+                const cls = L.bal < 3 ? 'crit' : (L.bal < 6 ? 'low' : '');
+                return `<div class="leave-bar ${cls}">
+                  <div class="top"><div class="label">${L.lbl}</div><div class="num"><strong>${L.bal}</strong> / ${L.ent} days remaining</div></div>
+                  <div class="track"><div class="fill" style="width:${(L.bal/L.ent*100).toFixed(0)}%"></div></div>
+                </div>`;
+              }).join('')}
+            ` : '<div class="empty">No leave record.</div>'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header"><div class="title">Attendance</div></div>
+          <div class="section-body" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 24px">
+            ${leave ? `
+              <div class="eyebrow" style="margin-bottom:12px">Monthly Attendance</div>
+              <div style="font-family:'Fraunces',serif;font-size:72px;font-weight:500;color:var(--teal);letter-spacing:-0.03em">${leave.attendance_pct.toFixed(1)}%</div>
+              <div style="color:var(--ink-light);margin-top:8px">${leave.attendance_pct >= 95 ? 'Excellent' : (leave.attendance_pct >= 90 ? 'Good' : 'Needs improvement')}</div>
+              <div style="width:100%;height:6px;background:var(--paper-warm);border-radius:999px;margin-top:24px;overflow:hidden">
+                <div style="width:${leave.attendance_pct}%;height:100%;background:var(--teal);border-radius:999px"></div>
+              </div>
+            ` : '<div class="empty">No data.</div>'}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERFORMANCE -->
+    <div class="tab-pane" data-tab-pane="performance">
+      <div class="grid-2">
+        <div class="section">
+          <div class="section-header">
+            <div class="title">Goals & Achievement <small>${goals.length} active</small></div>
+          </div>
+          <div class="section-body">
+            ${goals.length ? goals.map(g => {
+              const cls = g.achievement_pct >= 80 ? '' : (g.achievement_pct >= 60 ? 'warn' : 'crit');
+              const stars = '★'.repeat(g.rating) + '☆'.repeat(5 - g.rating);
+              return `<div class="goal-card">
+                <div class="top">
+                  <div>
+                    <div class="title">${escapeHtml(g.goal_title)}</div>
+                    <div class="desc">${escapeHtml(g.description)}</div>
+                  </div>
+                  <div class="stars" style="font-size:14px;color:${g.rating>=4?'var(--gold)':'var(--ink-light)'}">${stars}</div>
+                </div>
+                <div class="progress">
+                  <div class="track"><div class="fill ${cls}" style="width:${Math.min(100,g.achievement_pct)}%"></div></div>
+                  <div class="pct">${g.achievement_pct}%</div>
+                </div>
+                <div class="meta">
+                  <span>Target: <strong>${g.target}${g.unit==='%'?'%':''}</strong></span>
+                  <span>Actual: <strong>${g.actual}${g.unit==='%'?'%':''}</strong></span>
+                  <span>Weight: <strong>${g.weight}%</strong></span>
+                  <span style="margin-left:auto"><span class="pill pill-${g.status==='Completed'?'good':(g.status==='On Track'?'info':'bad')}">${g.status}</span></span>
+                </div>
+              </div>`;
+            }).join('') : '<div class="empty">No goals set.</div>'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header"><div class="title">Performance Trends</div></div>
+          <div class="section-body">
+            <div class="chart-wrap"><canvas id="perfChart"></canvas></div>
+            <div style="margin-top:20px;padding:16px;background:var(--paper);border:1px solid var(--hair);border-radius:4px">
+              <div class="eyebrow" style="margin-bottom:8px">Productivity profile</div>
+              ${prod ? `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+                  <div><div style="color:var(--ink-light)">Score</div><div style="font-family:'Fraunces',serif;font-size:24px;font-weight:500;margin-top:2px">${prod.score} / 5</div></div>
+                  <div><div style="color:var(--ink-light)">On-time delivery</div><div style="font-family:'Fraunces',serif;font-size:24px;font-weight:500;margin-top:2px">${prod.on_time_pct}%</div></div>
+                </div>
+              ` : '<div class="empty">No data.</div>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAINING -->
+    <div class="tab-pane" data-tab-pane="training">
+      <div class="section">
+        <div class="section-header">
+          <div class="title">Training & Skill Development <small>${completedTrn} of ${trainings.length} completed</small></div>
+        </div>
+        <div class="section-body">
+          ${trainings.length ? trainings.map(t => `
+            <div class="train-row">
+              <div>
+                <div class="title">${escapeHtml(t.train_title)}</div>
+                <div class="cat">${escapeHtml(t.category)} · <span class="pill ${t.status==='Completed'?'pill-good':(t.status==='In Progress'?'pill-info':'pill-warn')}">${t.status}</span>${t.mandatory?' · <span style="color:var(--crimson);font-weight:600">Mandatory</span>':''}</div>
+              </div>
+              <div class="track"><div class="fill" style="width:${t.completion_pct}%"></div></div>
+              <div class="pct">${t.completion_pct}%</div>
+            </div>
+          `).join('') : '<div class="empty">No training enrollments.</div>'}
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK -->
+    <div class="tab-pane" data-tab-pane="risk">
+      <div class="section">
+        <div class="section-header"><div class="title">HR Risk Records</div></div>
+        <div class="section-body" style="padding:0">
+          ${empRisks.length ? `
+            <table class="data-table">
+              <thead><tr><th>Risk ID</th><th>Category</th><th>Level</th><th>Raised</th><th>Status</th><th>Owner</th><th>Notes</th></tr></thead>
+              <tbody>
+                ${empRisks.map(r => `<tr>
+                  <td class="mono" style="font-size:12px">${r.risk_id}</td>
+                  <td>${escapeHtml(r.category)}</td>
+                  <td><span class="pill pill-${r.level==='High'?'bad':(r.level==='Medium'?'warn':'good')}">${r.level}</span></td>
+                  <td class="mono" style="font-size:12px">${fmtDateShort(r.raised_on)}</td>
+                  <td><span class="pill pill-${r.status==='Closed'?'good':(r.status==='Open'?'bad':'warn')}">${r.status}</span></td>
+                  <td style="font-size:12px">${escapeHtml(r.owner)}</td>
+                  <td style="font-size:12px;color:var(--ink-light)">${escapeHtml(r.notes)}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          ` : '<div class="empty">No risks recorded for this employee.</div>'}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Lazy chart init — only when Performance tab is activated (canvas must be visible)
+  let perfChartInstance = null;
+  function initPerfChart() {
+    if (perfChartInstance || !goals.length) return;
+    const canvas = $('#perfChart');
+    if (!canvas) return;
+    // Radar needs ≥3 points to form a polygon — fall back to horizontal bar for 1-2 goals
+    const useRadar = goals.length >= 3;
+    perfChartInstance = new Chart(canvas.getContext('2d'), {
+      type: useRadar ? 'radar' : 'bar',
+      data: {
+        labels: goals.map(g => g.goal_title),
+        datasets: [{
+          label: 'Achievement %',
+          data: goals.map(g => g.achievement_pct),
+          backgroundColor: useRadar ? 'rgba(44,127,118,0.18)' : goals.map(g => g.achievement_pct >= 80 ? '#2C7F76' : (g.achievement_pct >= 60 ? '#C49A3D' : '#B23A2C')),
+          borderColor: '#2C7F76',
+          pointBackgroundColor: '#2C7F76',
+          pointRadius: 4,
+          borderWidth: useRadar ? 2 : 0,
+          borderRadius: 3
+        }]
+      },
+      options: {
+        indexAxis: useRadar ? 'x' : 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed[useRadar ? 'r' : 'x']}%` }}},
+        scales: useRadar ? {
+          r: { suggestedMin: 0, suggestedMax: 100, ticks: { display: false }, pointLabels: { font: { family: 'Manrope', size: 11 }, color: '#4B5563' }, grid: { color: '#E5DDD0' }, angleLines: { color: '#E5DDD0' }}
+        } : {
+          x: { beginAtZero: true, max: 100, grid: { color: '#E5DDD0' }, ticks: { font: { family: 'JetBrains Mono', size: 10 }, color: '#6B7280', callback: v => v + '%' }},
+          y: { grid: { display: false }, ticks: { font: { family: 'Manrope', size: 12 }, color: '#4B5563' }}
+        }
+      }
+    });
+  }
+
+  // Wire tabs (with chart lazy-init)
+  $$('.tab').forEach(t => t.addEventListener('click', () => {
+    $$('.tab').forEach(x => x.classList.remove('active'));
+    $$('.tab-pane').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    $(`.tab-pane[data-tab-pane="${t.dataset.tab}"]`).classList.add('active');
+    if (t.dataset.tab === 'performance') {
+      // Wait one frame so the pane is visible before sizing the canvas
+      requestAnimationFrame(() => initPerfChart());
+    }
+  }));
+}
+
+function exportEmployeeProfile(empId) {
+  const e = empById(empId);
+  const pay = DATA.payroll.find(p => p.id === empId);
+  const leave = DATA.leaves.find(l => l.id === empId);
+  const goals = DATA.goals.filter(g => g.emp_id === empId);
+  const trainings = DATA.training_enrollments.filter(t => t.emp_id === empId);
+  const attr = DATA.attrition_risk.find(a => a.id === empId);
+
+  const rows = [
+    {section: 'Personal', field: 'Employee ID', value: e.id},
+    {section: 'Personal', field: 'Name', value: e.name},
+    {section: 'Personal', field: 'Department', value: e.dept},
+    {section: 'Personal', field: 'Designation', value: e.desig},
+    {section: 'Personal', field: 'Manager', value: e.manager},
+    {section: 'Personal', field: 'Date of Joining', value: e.doj},
+    {section: 'Personal', field: 'Status', value: e.status},
+    {section: 'Personal', field: 'Geography', value: e.geo},
+  ];
+
+  if (pay) {
+    rows.push(
+      {section: 'Payroll', field: 'Annual CTC', value: pay.ctc + ' ' + pay.currency},
+      {section: 'Payroll', field: 'Monthly Gross', value: pay.gross + ' ' + pay.currency},
+      {section: 'Payroll', field: 'Monthly Net', value: pay.net + ' ' + pay.currency}
+    );
+  }
+
+  if (leave) {
+    rows.push(
+      {section: 'Leave', field: 'CL/PTO Balance', value: `${leave.cl_balance}/${leave.cl_entitled}`},
+      {section: 'Leave', field: 'SL Balance', value: `${leave.sl_balance}/${leave.sl_entitled}`},
+      {section: 'Leave', field: 'EL Balance', value: leave.el_entitled > 0 ? `${leave.el_balance}/${leave.el_entitled}` : 'N/A'},
+      {section: 'Leave', field: 'Attendance %', value: leave.attendance_pct.toFixed(1) + '%'}
+    );
+  }
+
+  goals.forEach(g => {
+    rows.push({section: 'Goals', field: g.goal_title, value: `${g.actual}/${g.target} (${g.achievement_pct}%) - ${g.status} - ${g.rating}★`});
+  });
+
+  trainings.forEach(t => {
+    rows.push({section: 'Training', field: t.train_title, value: `${t.completion_pct}% - ${t.status}`});
+  });
+
+  if (attr) {
+    rows.push(
+      {section: 'Attrition Risk', field: 'Total Score', value: attr.total_score},
+      {section: 'Attrition Risk', field: 'Risk Level', value: attr.risk_level},
+      {section: 'Attrition Risk', field: 'Top Reason', value: attr.top_reason}
+    );
+  }
+
+  exportCSV(`profile_${empId}_${e.name.replace(/\s+/g,'_')}.csv`, rows, [
+    {key: 'section', label: 'Section'},
+    {key: 'field', label: 'Field'},
+    {key: 'value', label: 'Value'}
+  ]);
+}
+
+// ============================================================
+// PAGE: PAYROLL
+// ============================================================
+function renderPayroll(main) {
+  const indiaPay = DATA.payroll.filter(p => p.currency === 'INR');
+  const usPay = DATA.payroll.filter(p => p.currency === 'USD');
+  const indiaMonthly = indiaPay.reduce((s, p) => s + p.gross, 0);
+  const usMonthly = usPay.reduce((s, p) => s + p.gross, 0);
+  const indiaCTC = indiaPay.reduce((s, p) => s + p.ctc, 0);
+  const usCTC = usPay.reduce((s, p) => s + p.ctc, 0);
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Operations</div><div class="page-title">Payroll</div></div>
+      <button class="btn-ghost" onclick="exportCSV('payroll_full.csv', DATA.payroll, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'geo',label:'Geo'},{key:'dept',label:'Dept'},{key:'ctc',label:'Annual CTC'},{key:'basic',label:'Basic'},{key:'hra',label:'HRA'},{key:'special',label:'Special'},{key:'gross',label:'Gross'},{key:'pf_emp',label:'PF/Fed Tax'},{key:'esi',label:'ESI/SS'},{key:'pt',label:'PT/Medicare'},{key:'tds',label:'TDS/State'},{key:'net',label:'Net'},{key:'currency',label:'Currency'}])">⬇ Export Payroll (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card"><div class="label">India Monthly Payroll</div><div class="value mono" style="font-size:30px">${fmtINR(indiaMonthly)}</div><div class="sub">${indiaPay.length} employees</div></div>
+      <div class="kpi-card"><div class="label">India Annual CTC</div><div class="value mono" style="font-size:30px">${fmtINR(indiaCTC)}</div><div class="sub">Total commitments</div></div>
+      <div class="kpi-card"><div class="label">US Monthly Payroll</div><div class="value mono" style="font-size:30px;color:var(--crimson)">${fmtUSD(usMonthly)}</div><div class="sub">${usPay.length} employees</div></div>
+      <div class="kpi-card"><div class="label">US Annual CTC</div><div class="value mono" style="font-size:30px;color:var(--crimson)">${fmtUSD(usCTC)}</div><div class="sub">Total commitments</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">All Payroll Records</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Name</th><th>Geo</th><th>Dept</th><th class="num">Annual CTC</th><th class="num">Gross</th><th class="num">Deductions</th><th class="num">Net Pay</th></tr></thead>
+          <tbody>
+            ${DATA.payroll.map(p => `
+              <tr class="clickable" onclick="navigate('employee-profile','${p.id}')">
+                <td class="mono" style="font-size:12px;color:var(--ink-light)">${p.id}</td>
+                <td class="name-cell">${escapeHtml(p.name)}</td>
+                <td>${p.geo}</td>
+                <td>${escapeHtml(p.dept)}</td>
+                <td class="num mono">${fmtMoney(p.ctc, p.currency)}</td>
+                <td class="num mono">${fmtMoney(p.gross, p.currency)}</td>
+                <td class="num mono" style="color:var(--crimson)">−${fmtMoney(p.pf_emp+p.esi+p.pt+p.tds, p.currency)}</td>
+                <td class="num mono" style="font-weight:700">${fmtMoney(p.net, p.currency)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PAGE: ATTENDANCE & LEAVE
+// ============================================================
+function renderAttendance(main) {
+  const avgAttIndia = DATA.leaves.filter(l => l.geo === 'India').reduce((s,l) => s + l.attendance_pct, 0) / DATA.leaves.filter(l => l.geo === 'India').length;
+  const avgAttUS = DATA.leaves.filter(l => l.geo === 'US').reduce((s,l) => s + l.attendance_pct, 0) / DATA.leaves.filter(l => l.geo === 'US').length;
+  const lowBalance = DATA.leaves.filter(l => l.cl_balance < 3 || l.sl_balance < 3).length;
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Operations</div><div class="page-title">Attendance & Leave</div></div>
+      <button class="btn-ghost" onclick="exportCSV('leave_full.csv', DATA.leaves, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'geo',label:'Geo'},{key:'cl_entitled',label:'CL Ent'},{key:'cl_used',label:'CL Used'},{key:'cl_balance',label:'CL Bal'},{key:'sl_entitled',label:'SL Ent'},{key:'sl_used',label:'SL Used'},{key:'sl_balance',label:'SL Bal'},{key:'el_balance',label:'EL Bal'},{key:'attendance_pct',label:'Attendance %', format:v=>v.toFixed(1)+'%'}])">⬇ Export Leave (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi-card good"><div class="label">India Avg Attendance</div><div class="value">${avgAttIndia.toFixed(1)}%</div></div>
+      <div class="kpi-card good"><div class="label">US Avg Attendance</div><div class="value">${avgAttUS.toFixed(1)}%</div></div>
+      <div class="kpi-card warn"><div class="label">Low Leave Balance</div><div class="value">${lowBalance}</div><div class="sub">Employees with &lt;3 days</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">Leave Balances · All Employees</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Geo</th><th>Dept</th><th class="num">CL/PTO</th><th class="num">SL/Sick</th><th class="num">EL</th><th class="num">Attendance</th></tr></thead>
+          <tbody>
+            ${DATA.leaves.map(l => `
+              <tr class="clickable" onclick="navigate('employee-profile','${l.id}')">
+                <td class="name-cell">${escapeHtml(l.name)}</td>
+                <td>${l.geo}</td>
+                <td>${escapeHtml(l.dept)}</td>
+                <td class="num"><span class="pill pill-${l.cl_balance<3?'bad':(l.cl_balance<6?'warn':'good')}">${l.cl_balance} / ${l.cl_entitled}</span></td>
+                <td class="num"><span class="pill pill-${l.sl_balance<3?'bad':(l.sl_balance<6?'warn':'good')}">${l.sl_balance} / ${l.sl_entitled}</span></td>
+                <td class="num">${l.el_entitled > 0 ? `${l.el_balance} / ${l.el_entitled}` : '—'}</td>
+                <td class="num mono">${l.attendance_pct.toFixed(1)}%</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PAGE: PERFORMANCE
+// ============================================================
+function renderPerformance(main) {
+  const byEmp = {};
+  DATA.goals.forEach(g => {
+    if (!byEmp[g.emp_id]) byEmp[g.emp_id] = { name: g.emp_name, dept: g.dept, geo: g.geo, goals: 0, avgRating: 0, avgAch: 0, completed: 0, atRisk: 0 };
+    byEmp[g.emp_id].goals++;
+    byEmp[g.emp_id].avgRating += g.rating;
+    byEmp[g.emp_id].avgAch += g.achievement_pct;
+    if (g.status === 'Completed') byEmp[g.emp_id].completed++;
+    if (g.status === 'At Risk') byEmp[g.emp_id].atRisk++;
+  });
+  const rows = Object.entries(byEmp).map(([id, v]) => ({
+    id, name: v.name, dept: v.dept, geo: v.geo, goals: v.goals,
+    avgRating: (v.avgRating / v.goals).toFixed(1),
+    avgAch: (v.avgAch / v.goals).toFixed(0),
+    completed: v.completed,
+    atRisk: v.atRisk
+  })).sort((a, b) => b.avgRating - a.avgRating);
+
+  const completedGoals = DATA.goals.filter(g => g.status === 'Completed').length;
+  const atRiskGoals = DATA.goals.filter(g => g.status === 'At Risk').length;
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Operations</div><div class="page-title">Performance Management</div></div>
+      <button class="btn-ghost" onclick="exportCSV('performance_goals.csv', DATA.goals, [{key:'goal_id',label:'Goal ID'},{key:'emp_id',label:'Emp ID'},{key:'emp_name',label:'Name'},{key:'geo',label:'Geo'},{key:'dept',label:'Dept'},{key:'goal_title',label:'Goal'},{key:'target',label:'Target'},{key:'actual',label:'Actual'},{key:'achievement_pct',label:'Achievement %'},{key:'rating',label:'Rating'},{key:'status',label:'Status'}])">⬇ Export Goals (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card"><div class="label">Total Goals</div><div class="value">${DATA.goals.length}</div></div>
+      <div class="kpi-card good"><div class="label">Completed</div><div class="value">${completedGoals}</div></div>
+      <div class="kpi-card alert"><div class="label">At Risk</div><div class="value">${atRiskGoals}</div></div>
+      <div class="kpi-card"><div class="label">Avg Rating</div><div class="value">${(DATA.goals.reduce((s,g)=>s+g.rating,0)/DATA.goals.length).toFixed(1)} <span style="font-size:14px;color:var(--ink-light)">/5</span></div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">Employee Performance Summary</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>Employee</th><th>Geo</th><th>Dept</th><th class="num">Goals</th><th class="num">Avg Rating</th><th class="num">Achievement</th><th class="num">Completed</th><th class="num">At Risk</th></tr></thead>
+          <tbody>
+            ${rows.map(r => `
+              <tr class="clickable" onclick="navigate('employee-profile','${r.id}')">
+                <td class="name-cell">${escapeHtml(r.name)}</td>
+                <td>${r.geo}</td>
+                <td>${escapeHtml(r.dept)}</td>
+                <td class="num mono">${r.goals}</td>
+                <td class="num"><strong style="color:${r.avgRating>=4?'var(--teal)':(r.avgRating>=3?'var(--gold)':'var(--crimson)')}">${r.avgRating}</strong> ★</td>
+                <td class="num mono">${r.avgAch}%</td>
+                <td class="num"><span class="pill pill-good">${r.completed}</span></td>
+                <td class="num">${r.atRisk > 0 ? `<span class="pill pill-bad">${r.atRisk}</span>` : '—'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PAGE: RECRUITMENT
+// ============================================================
+function renderRecruitment(main) {
+  const stages = ['Applied', 'Screened', 'Interviewed', 'Offered', 'Joined'];
+  const stageCounts = stages.map(s => DATA.candidates.filter(c => c.stage === s).length);
+  const maxStage = Math.max(...stageCounts);
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Operations</div><div class="page-title">Recruitment</div></div>
+      <button class="btn-ghost" onclick="exportCSV('candidates.csv', DATA.candidates, [{key:'cand_id',label:'Candidate ID'},{key:'name',label:'Name'},{key:'pos_title',label:'Position'},{key:'dept',label:'Dept'},{key:'geo',label:'Geo'},{key:'stage',label:'Stage'},{key:'days_in_stage',label:'Days in Stage'},{key:'source',label:'Source'},{key:'rating',label:'Rating'}])">⬇ Export Pipeline (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card"><div class="label">Open Positions</div><div class="value">${DATA.open_positions.length}</div></div>
+      <div class="kpi-card"><div class="label">Total Openings</div><div class="value">${DATA.open_positions.reduce((s,p)=>s+p.openings,0)}</div></div>
+      <div class="kpi-card alert"><div class="label">High Priority</div><div class="value">${DATA.open_positions.filter(p=>p.priority==='High').length}</div></div>
+      <div class="kpi-card"><div class="label">Candidates</div><div class="value">${DATA.candidates.length}</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="section">
+        <div class="section-header"><div class="title">Candidate Funnel</div></div>
+        <div class="section-body">
+          <div class="funnel">
+            ${stages.map((s, i) => {
+              const width = (stageCounts[i] / maxStage * 100).toFixed(0);
+              return `<div class="funnel-row">
+                <div class="name">${s}</div>
+                <div class="bar s${i+1}" style="width:${width}%">${stageCounts[i]}</div>
+                <div class="num">${(stageCounts[i] / DATA.candidates.length * 100).toFixed(0)}%</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><div class="title">Open Positions</div></div>
+        <div class="section-body" style="padding:0">
+          <table class="data-table">
+            <thead><tr><th>Title</th><th>Dept</th><th class="num">Openings</th><th>Priority</th><th class="num">Days Open</th></tr></thead>
+            <tbody>
+              ${DATA.open_positions.map(p => `<tr>
+                <td class="name-cell" style="font-size:12px">${escapeHtml(p.title)}</td>
+                <td>${escapeHtml(p.dept)}</td>
+                <td class="num mono">${p.openings}</td>
+                <td><span class="pill pill-${p.priority==='High'?'bad':(p.priority==='Medium'?'warn':'good')}">${p.priority}</span></td>
+                <td class="num mono">${p.days_open}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">Candidate Pipeline</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Name</th><th>Position</th><th>Stage</th><th class="num">Days</th><th>Source</th><th class="num">Rating</th></tr></thead>
+          <tbody>
+            ${DATA.candidates.map(c => {
+              const stageCls = c.stage==='Applied'?'pill-neutral':(c.stage==='Screened'?'pill-info':(c.stage==='Interviewed'?'pill-info':(c.stage==='Offered'?'pill-warn':'pill-good')));
+              return `<tr>
+                <td class="mono" style="font-size:12px;color:var(--ink-light)">${c.cand_id}</td>
+                <td class="name-cell">${escapeHtml(c.name)}</td>
+                <td>${escapeHtml(c.pos_title)}</td>
+                <td><span class="pill ${stageCls}">${c.stage}</span></td>
+                <td class="num mono">${c.days_in_stage}</td>
+                <td>${c.source}</td>
+                <td class="num">${c.rating > 0 ? '★'.repeat(c.rating) : '—'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PAGE: COMPLIANCE
+// ============================================================
+function renderCompliance(main) {
+  const enriched = DATA.compliance.map(c => ({...c, days: daysBetween(TODAY, c.due_date)})).sort((a, b) => a.days - b.days);
+  const overdue = enriched.filter(c => c.days < 0).length;
+  const critical = enriched.filter(c => c.days >= 0 && c.days <= 7).length;
+  const upcoming = enriched.filter(c => c.days > 7 && c.days <= 30).length;
+  const scheduled = enriched.filter(c => c.days > 30).length;
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Insights</div><div class="page-title">Compliance Calendar</div></div>
+      <button class="btn-ghost" onclick="exportCSV('compliance.csv', enriched_compliance(), [{key:'comp_id',label:'ID'},{key:'title',label:'Event'},{key:'category',label:'Category'},{key:'geo',label:'Geo'},{key:'authority',label:'Authority'},{key:'due_date',label:'Due Date'},{key:'frequency',label:'Frequency'},{key:'days',label:'Days Until'},{key:'status_lbl',label:'Status'}])">⬇ Export (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card alert"><div class="label">Overdue</div><div class="value">${overdue}</div><div class="sub">Immediate action</div></div>
+      <div class="kpi-card alert"><div class="label">Critical (≤7d)</div><div class="value">${critical}</div><div class="sub">File this week</div></div>
+      <div class="kpi-card warn"><div class="label">Upcoming (≤30d)</div><div class="value">${upcoming}</div><div class="sub">Plan ahead</div></div>
+      <div class="kpi-card good"><div class="label">Scheduled</div><div class="value">${scheduled}</div><div class="sub">No immediate action</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">Statutory Deadlines</div></div>
+      <div class="section-body">
+        ${enriched.map(c => {
+          const cls = c.days < 0 ? 'bad' : (c.days <= 7 ? 'bad' : (c.days <= 30 ? 'warn' : ''));
+          const status = c.days < 0 ? 'Overdue' : (c.days <= 7 ? 'Critical' : (c.days <= 30 ? 'Upcoming' : 'Scheduled'));
+          const pillCls = c.days < 0 ? 'pill-bad' : (c.days <= 7 ? 'pill-bad' : (c.days <= 30 ? 'pill-warn' : 'pill-good'));
+          return `<div class="comp-row">
+            <div>
+              <div class="title">${escapeHtml(c.title)}</div>
+              <div class="meta">${escapeHtml(c.category)} · ${c.geo} · ${escapeHtml(c.authority)} · ${c.frequency}</div>
+            </div>
+            <div class="date">${fmtDate(c.due_date)}</div>
+            <div class="days ${cls}">${c.days}d</div>
+            <div><span class="pill ${pillCls}">${status}</span></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function enriched_compliance() {
+  return DATA.compliance.map(c => {
+    const days = daysBetween(TODAY, c.due_date);
+    const status_lbl = days < 0 ? 'Overdue' : (days <= 7 ? 'Critical' : (days <= 30 ? 'Upcoming' : 'Scheduled'));
+    return {...c, days, status_lbl};
+  });
+}
+
+// ============================================================
+// PAGE: TRAINING
+// ============================================================
+function renderTraining(main) {
+  const programs = DATA.training_programs.map(p => {
+    const enrolls = DATA.training_enrollments.filter(e => e.train_id === p.train_id);
+    const completed = enrolls.filter(e => e.status === 'Completed').length;
+    return {...p, enrolled: enrolls.length, completed, pct: enrolls.length ? (completed / enrolls.length * 100).toFixed(0) : 0};
+  });
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Insights</div><div class="page-title">Training & Skills</div></div>
+      <button class="btn-ghost" onclick="exportCSV('training_enrollments.csv', DATA.training_enrollments, [{key:'enroll_id',label:'Enroll ID'},{key:'emp_id',label:'Emp ID'},{key:'emp_name',label:'Name'},{key:'train_title',label:'Program'},{key:'category',label:'Category'},{key:'mandatory',label:'Mandatory'},{key:'completion_pct',label:'Completion %'},{key:'status',label:'Status'}])">⬇ Export (CSV)</button>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="kpi-card"><div class="label">Programs</div><div class="value">${DATA.training_programs.length}</div></div>
+      <div class="kpi-card alert"><div class="label">Mandatory</div><div class="value">${DATA.training_programs.filter(p=>p.mandatory).length}</div></div>
+      <div class="kpi-card"><div class="label">Enrollments</div><div class="value">${DATA.training_enrollments.length}</div></div>
+      <div class="kpi-card good"><div class="label">Completion Rate</div><div class="value">${(DATA.training_enrollments.filter(e=>e.status==='Completed').length / DATA.training_enrollments.length * 100).toFixed(0)}%</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">Training Programs</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>Program</th><th>Category</th><th>Mandatory</th><th class="num">Duration</th><th class="num">Enrolled</th><th class="num">Completed</th><th class="num">Completion %</th></tr></thead>
+          <tbody>
+            ${programs.map(p => `<tr>
+              <td class="name-cell">${escapeHtml(p.title)}</td>
+              <td>${escapeHtml(p.category)}</td>
+              <td>${p.mandatory ? '<span class="pill pill-bad">Yes</span>' : '<span class="pill pill-neutral">Optional</span>'}</td>
+              <td class="num mono">${p.duration_hrs}h</td>
+              <td class="num mono">${p.enrolled}</td>
+              <td class="num mono">${p.completed}</td>
+              <td class="num"><strong>${p.pct}%</strong></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// PAGE: ATTRITION RISK
+// ============================================================
+function renderRiskPage(main) {
+  const sorted = [...DATA.attrition_risk].sort((a, b) => b.total_score - a.total_score);
+  const high = sorted.filter(r => r.risk_level === 'High');
+  const med = sorted.filter(r => r.risk_level === 'Medium');
+  const low = sorted.filter(r => r.risk_level === 'Low');
+
+  main.innerHTML = `
+    <div class="page-header">
+      <div><div class="eyebrow">Insights</div><div class="page-title">Attrition Risk</div></div>
+      <button class="btn-ghost" onclick="exportCSV('attrition_risk.csv', DATA.attrition_risk, [{key:'id',label:'ID'},{key:'name',label:'Name'},{key:'geo',label:'Geo'},{key:'dept',label:'Dept'},{key:'desig',label:'Designation'},{key:'tenure_days',label:'Tenure Days'},{key:'tenure_score',label:'Tenure Score'},{key:'prod_score',label:'Productivity Score'},{key:'comp_score',label:'Comp Score'},{key:'other_score',label:'Other Score'},{key:'total_score',label:'Total Score'},{key:'risk_level',label:'Risk Level'},{key:'top_reason',label:'Top Reason'}])">⬇ Export Risk Data (CSV)</button>
+    </div>
+
+    <div style="background:var(--paper-warm);border:1px solid var(--hair);border-radius:6px;padding:20px;margin-bottom:24px;font-size:13px;color:var(--ink-soft);line-height:1.7">
+      <strong>How the model works:</strong> Each employee is scored 0–100 based on four weighted factors: <em>Tenure</em> (highest risk in months 6-18), <em>Productivity</em> (lower scores increase risk), <em>Compensation Ratio</em> (below-market pay increases risk), and <em>Other Factors</em> (manager changes, internal signals). Total Score → Risk Level: <span class="pill pill-bad">High ≥65</span> <span class="pill pill-warn">Medium 35–64</span> <span class="pill pill-good">Low &lt;35</span>
+    </div>
+
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kpi-card alert"><div class="label">High Risk</div><div class="value">${high.length}</div><div class="sub">Immediate intervention</div></div>
+      <div class="kpi-card warn"><div class="label">Medium Risk</div><div class="value">${med.length}</div><div class="sub">Monitor closely</div></div>
+      <div class="kpi-card good"><div class="label">Low Risk</div><div class="value">${low.length}</div><div class="sub">Stable retention</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-header"><div class="title">All Employees · Risk Scored</div></div>
+      <div class="section-body" style="padding:0">
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Name</th><th>Geo</th><th>Dept</th><th>Designation</th><th>Manager</th><th class="num">Score</th><th>Risk</th><th>Top Reason</th></tr></thead>
+          <tbody>
+            ${sorted.map(r => `<tr class="clickable" onclick="navigate('employee-profile','${r.id}')">
+              <td class="mono" style="font-size:12px;color:var(--ink-light)">${r.id}</td>
+              <td class="name-cell">${escapeHtml(r.name)}</td>
+              <td>${r.geo}</td>
+              <td>${escapeHtml(r.dept)}</td>
+              <td style="font-size:12px">${escapeHtml(r.desig)}</td>
+              <td style="font-size:12px;color:var(--ink-light)">${escapeHtml(r.manager)}</td>
+              <td class="num"><strong>${r.total_score}</strong></td>
+              <td><span class="pill pill-${r.risk_level==='High'?'bad':(r.risk_level==='Medium'?'warn':'good')}">${r.risk_level}</span></td>
+              <td style="font-size:12px;color:var(--ink-light)">${escapeHtml(r.top_reason)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// LOGIN HANDLING
+// ============================================================
+$('#login-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const email = $('#email').value.trim();
+  // Derive a name from the email for personalization
+  const name = email.split('@')[0]
+    .split('.')
+    .map(s => s[0].toUpperCase() + s.slice(1))
+    .join(' ');
+  $('#user-name').textContent = name || 'HR Admin';
+  $('#user-avatar').textContent = (name.match(/[A-Z]/g) || ['H','R']).slice(0,2).join('').toUpperCase();
+
+  $('#login-screen').style.display = 'none';
+  $('#app').classList.add('active');
+  navigate('dashboard');
+});
+
+$('#logout-btn').addEventListener('click', () => {
+  $('#login-screen').style.display = 'flex';
+  $('#app').classList.remove('active');
+});
+
+// Sidebar nav
+$$('.nav-item').forEach(n => n.addEventListener('click', () => {
+  navigate(n.dataset.page);
+}));
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Normalize line endings across Mac, Windows, and Linux.
+# All text files use LF when stored in git.
+* text=auto eol=lf
+
+# Treat these as binary (don't convert line endings, don't diff)
+*.xlsx binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.db   binary
+
+# Specific Windows scripts that should keep CRLF (none in this project, but
+# leaving the pattern documented for reference)
+# *.bat eol=crlf
+# *.ps1 eol=crlf

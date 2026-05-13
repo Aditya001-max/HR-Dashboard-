@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-fraunces: "Fraunces", Georgia, serif;
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-manrope: "Manrope", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ink: #0f1411;
+  --ink-soft: #1a1f1c;
+  --cream: #efe9dd;
+  --cream-paper: #f6f1e7;
+  --cream-warm: #e6dfd0;
+  --signal: #10b981;
+}
+
+html, body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(15, 20, 17, 0.18); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(15, 20, 17, 0.4); }
+
+.serif { font-family: var(--font-fraunces); }
+.mono  { font-family: var(--font-mono); font-feature-settings: "tnum", "zero"; }
+.tnum  { font-variant-numeric: tabular-nums; }
+
+/* ───────── Cards ─────────── */
+.card {
+  background: var(--cream-paper);
+  border: 1px solid rgba(15, 20, 17, 0.06);
+  border-radius: 1rem;
+  padding: 1.125rem;
+  box-shadow:
+    0 1px 2px rgba(15, 20, 17, 0.04),
+    0 8px 24px -8px rgba(15, 20, 17, 0.12);
+}
+@media (min-width: 640px) {
+  .card { padding: 1.5rem; }
+}
+.card-ink {
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 1rem;
+  padding: 1.125rem;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 12px 32px -12px rgba(0, 0, 0, 0.4);
+}
+@media (min-width: 640px) {
+  .card-ink { padding: 1.5rem; }
+}
+.kpi-tile {
+  background: var(--ink);
+  color: var(--cream);
+  border: 1px solid rgba(16, 185, 129, 0);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 12px 32px -12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  cursor: default;
+}
+.kpi-tile:hover {
+  background: var(--ink-soft);
+  border-color: rgba(16, 185, 129, 0.45);
+  transform: translateY(-3px);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.35),
+    0 18px 40px -10px rgba(16, 185, 129, 0.25),
+    0 18px 40px -10px rgba(0, 0, 0, 0.45);
+}
+@media (min-width: 640px) {
+  .kpi-tile { padding: 1.25rem; }
+}
+.kpi-tile-light {
+  background: var(--cream-paper);
+  color: var(--ink);
+  border: 1px solid rgba(15, 20, 17, 0.06);
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow:
+    0 1px 2px rgba(15, 20, 17, 0.04),
+    0 8px 24px -8px rgba(15, 20, 17, 0.12);
+  transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.kpi-tile-light:hover {
+  background: var(--cream-warm);
+  border-color: rgba(15, 20, 17, 0.22);
+  transform: translateY(-3px);
+  box-shadow:
+    0 6px 14px rgba(15, 20, 17, 0.10),
+    0 20px 36px -12px rgba(15, 20, 17, 0.22);
+}
+@media (min-width: 640px) {
+  .kpi-tile-light { padding: 1.25rem; }
+}
+
+/* ───────── Pills ─────────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+.pill-low      { background: rgba(16, 185, 129, 0.15); color: #047857; }
+.pill-medium   { background: rgba(212, 169, 106, 0.20); color: #78350f; }
+.pill-high     { background: rgba(220, 90, 62, 0.15); color: #dc5a3e; }
+.pill-neutral  { background: rgba(15, 20, 17, 0.10); color: rgba(15, 20, 17, 0.70); }
+.pill-on-ink   { background: rgba(239, 233, 221, 0.10); color: rgba(239, 233, 221, 0.80); }
+
+/* ───────── Typography ─────────── */
+.display {
+  font-family: var(--font-inter);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  font-feature-settings: "tnum", "zero", "ss01";
+}
+.eyebrow {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 500;
+}
+
+.h-section {
+  font-family: var(--font-fraunces);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 300;
+}
+@media (min-width: 640px) {
+  .h-section { font-size: 28px; }
+}
+
+.hairline {
+  border-top: 1px solid rgba(15, 20, 17, 0.08);
+}
+
+/* ───────── Row hover (clearly visible on cream-paper) ─────── */
+.row-hover {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.row-hover:hover {
+  background: rgba(15, 20, 17, 0.06);
+  box-shadow: inset 3px 0 0 var(--signal);
+}
+.row-hover:hover td a {
+  color: var(--signal);
+}
+
+/* Soft background glow used on hero sections */
+.glow {
+  position: absolute;
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: 0.45;
+  border-radius: 9999px;
+}

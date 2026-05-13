@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "functions": {
+    "app/api/export/dashboard/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/import/excel/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

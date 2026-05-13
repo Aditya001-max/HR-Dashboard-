@@ -1,0 +1,70 @@
+═══════════════════════════════════════════════════════════════════════
+  MERIDIAN HR — QUICK START
+═══════════════════════════════════════════════════════════════════════
+
+FULL-STACK WEB APP (Next.js + Prisma + SQLite locally / Postgres on Vercel)
+
+────────────────────────────────────────────────────────────────────
+RUN LOCALLY  (zero database setup — ships with SQLite)
+────────────────────────────────────────────────────────────────────
+
+  1.  cp .env.example .env
+  2.  npm install
+  3.  npm run setup      ← creates SQLite DB + seeds 116 employees
+  4.  npm run dev        ← opens at http://localhost:5173
+
+  Sign in with:
+      hr.admin@meridian.co  /  demopassword
+
+────────────────────────────────────────────────────────────────────
+DEPLOY TO VERCEL  (free, ~15 min — automatic Postgres swap)
+────────────────────────────────────────────────────────────────────
+
+  Read  DEPLOY.md  for step-by-step.
+
+  Summary:
+    1. Push code to GitHub
+    2. Create free Neon Postgres at neon.tech
+    3. Seed Neon once from your laptop
+    4. Import the repo to Vercel + paste env vars
+    5. Click Deploy — done
+
+  The build script automatically swaps in the Postgres schema when it
+  detects it's running on Vercel. You don't edit anything.
+
+────────────────────────────────────────────────────────────────────
+WHAT'S WHERE
+────────────────────────────────────────────────────────────────────
+
+  app/                   Next.js pages and API routes
+  components/            Shared React components
+  lib/                   db.ts, auth.ts, excel.ts, analytics.ts
+  prisma/
+    schema.prisma        SQLite (local dev)
+    schema.postgres.prisma  Postgres (production — swapped at build)
+    seed.ts              Loads source-code/hr_data.json (116 employees)
+  scripts/
+    prepare-build.mjs    Vercel-only schema swap
+  source-code/           Legacy + hr_data.json (seed source)
+  web/                   Legacy single-file HTML predecessor (optional)
+
+  README.md              Full project overview
+  DEPLOY.md              Production deployment guide
+  docs/HOW_TO_USE.md     User guide (what each page does)
+
+────────────────────────────────────────────────────────────────────
+USEFUL COMMANDS
+────────────────────────────────────────────────────────────────────
+
+  npm run dev            Start dev server on :5173
+  npm run setup          Create local DB + seed (first-time setup)
+  npm run build          Production build (local — keeps SQLite)
+  npm run db:reset       Wipe + recreate + reseed (destructive)
+  npm run db:seed        Re-load employees without dropping schema
+
+  node scripts/prepare-build.mjs --postgres
+      Manually switch to Postgres schema (use when seeding Neon)
+  node scripts/prepare-build.mjs --sqlite
+      Restore SQLite schema (use after seeding Neon)
+
+═══════════════════════════════════════════════════════════════════════

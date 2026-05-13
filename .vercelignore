@@ -1,0 +1,30 @@
+# Files/folders Vercel should NOT upload to the build.
+# Reduces upload size and build time, doesn't affect the deployed app.
+
+# Legacy single-file HTML predecessor
+web/
+
+# Build artifacts from previous Python tooling (not used at runtime)
+source-code/build_app.py
+source-code/build_extensions.py
+source-code/build_workbook.py
+source-code/generate_data.py
+source-code/chart.umd.js
+source-code/template.html
+
+# Local SQLite database (prod uses Neon Postgres)
+prisma/dev.db
+prisma/dev.db-journal
+
+# Local environment file (never deploy)
+.env
+
+# Excel exports created during testing
+HR_Automation_Dashboard.xlsx
+
+# IDE / OS junk
+.DS_Store
+.vscode/
+
+# Local Next.js build cache (Vercel recreates it)
+.next/

@@ -1,0 +1,36 @@
+# Build artifacts
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+.tmp/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.env.local
+.env.production
+
+# Database
+prisma/dev.db
+prisma/dev.db-journal
+
+# Next type defs
+next-env.d.ts

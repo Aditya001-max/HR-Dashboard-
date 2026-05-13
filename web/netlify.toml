@@ -1,0 +1,20 @@
+# Netlify configuration for Meridian HR
+# Place this file at the root of your deployment
+
+[build]
+  publish = "."
+
+# Cache the main HTML moderately (since data is embedded, refresh on update)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Redirect bare path to index
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
