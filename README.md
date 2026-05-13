@@ -67,7 +67,7 @@ Sign in with one of the seeded accounts:
 | Email | Password |
 |---|---|
 | `hr.admin@meridian.co` | `demopassword` |
-| `damini.ai@divinehindu.in` | `welcome123` |
+
 
 Both have the same `hr_admin` role.
 
